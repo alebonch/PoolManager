@@ -32,7 +32,7 @@ CREATE TABLE Tipologia (
 
 -- Creazione della tabella Prenotazione
 CREATE TABLE Prenotazione (
-    user VARCHAR(50) PRIMARY KEY REFERENCES Users(mail),
+    user VARCHAR(50) REFERENCES Users(mail),
     postazione INT PRIMARY KEY REFERENCES Postazione(number),
     date TIMESTAMP PRIMARY KEY
     pagamento INT DEFAULT 0 REFERENCES PaymentMethods(id)
