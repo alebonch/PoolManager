@@ -21,11 +21,11 @@ CREATE TABLE Postazione (
 );
 
 -- Creazione della Tipologia
-CREATE TABLE Tipologia (
+CREATE TABLE Type (
     code INT PRIMARY KEY,
     n_sunbeds INT,
     n_chairs INT,
-    n_deckchair INT,
+    n_deckchairs INT,
     m_sunbeds VARCHAR(20),
     gazebo BOOLEAN
 );
