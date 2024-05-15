@@ -1,10 +1,10 @@
 package DomainModel;
 
-public class Tipologia {
-    private int id, n_sunbeds, n_chairs, n_deckchairs,;
+public class Typology {
+    private int id, n_sunbeds, n_chairs, n_deckchairs;
     private boolean gazebo;
     private String m_sunbeds;
-    public Tipologia(int id, int n_chairs, int n_deckchairs, int n_sunbeds, String m_sunbeds, boolean gazebo){
+    public Typology(int id, int n_chairs, int n_deckchairs, int n_sunbeds, String m_sunbeds, boolean gazebo){
         this.id=id;
         this.n_chairs=n_chairs;
         this.n_deckchairs=n_deckchairs;

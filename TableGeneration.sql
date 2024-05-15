@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS PaymentMethods cascade;
-DROP TABLE IF EXISTS Prenotazione cascade;
-DROP TABLE IF EXISTS Tipologia cascade;
-DROP TABLE IF EXISTS Postazione cascade;
+DROP TABLE IF EXISTS Position cascade;
+DROP TABLE IF EXISTS Typology cascade;
+DROP TABLE IF EXISTS Reservation cascade;
 DROP TABLE IF EXISTS Users cascade;
 
 -- Creazione della tabella Utenti
@@ -12,16 +12,8 @@ CREATE TABLE Users (
     surname VARCHAR(50) NOT NULL,
 	telephone VARCHAR(10)
 );
-
--- Creazione della tabella Postazione
-CREATE TABLE Postazione (
-    number INT PRIMARY KEY NOT NULL,
-    type INT NOT NULL REFERENCES Tipologia(code),
-    zone VARCHAR(20) NOT NULL
-);
-
 -- Creazione della Tipologia
-CREATE TABLE Type (
+CREATE TABLE Typology (
     code INT PRIMARY KEY,
     n_sunbeds INT,
     n_chairs INT,
@@ -29,24 +21,23 @@ CREATE TABLE Type (
     m_sunbeds VARCHAR(20),
     gazebo BOOLEAN
 );
-
--- Creazione della tabella Prenotazione
-CREATE TABLE Prenotazione (
-    user VARCHAR(50) REFERENCES Users(mail),
-    postazione INT PRIMARY KEY REFERENCES Postazione(number),
-    date TIMESTAMP PRIMARY KEY
-    pagamento INT DEFAULT 0 REFERENCES PaymentMethods(id)
+-- Creazione della tabella Postazione
+CREATE TABLE Postation (
+    number INT PRIMARY KEY NOT NULL,
+    type INT NOT NULL REFERENCES Typology(code),
+    zone VARCHAR(20) NOT NULL,
+    availability BOOLEAN NOT NULL
 );
-
 -- Creazione della tabella Metodi di Pagamento
 CREATE TABLE PaymentMethods (
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL
 );
-
-create view cars_view as
-select * from vehicles natural join cars;
-
-create view mopeds_view as
-select * from vehicles natural join mopeds;
-
+-- Creazione della tabella Prenotazione
+CREATE TABLE Reservation (
+    userId VARCHAR(50) REFERENCES Users(mail),
+    postazione INT REFERENCES Postation(number),
+    date TIMESTAMP,
+    pagamento INT DEFAULT 0 REFERENCES PaymentMethods(id),
+	PRIMARY KEY(postazione, date)
+);
