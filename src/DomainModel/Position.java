@@ -6,6 +6,12 @@ public class Position{
     private String zone;
     private boolean availability;
 
+    public Position(int id, Typology type, String zone, boolean availability){
+        this.id=id;
+        this.typo=type;
+        this.zone=zone;
+        this.availability=availability;
+    }
     public Position(int id, Typology type, String zone){
         this.id=id;
         this.typo=type;

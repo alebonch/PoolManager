@@ -20,6 +20,13 @@ public class Reservation {
         this.data=data;
         this.hourOfArrival = "Not inserted";
     }
+    public Reservation(User user, Position postazione,String data){
+        this.user=user;
+        this.posto=postazione;
+        this.pm = null;
+        this.data=data;
+        this.hourOfArrival = "Not inserted";
+    }
 
     public String getHour(){
         return hourOfArrival;

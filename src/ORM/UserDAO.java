@@ -64,26 +64,6 @@ public User checkPassword(String username, String password) throws SQLException,
         return null;
     }
 }
-public void removeUser(String mail) throws SQLException, ClassNotFoundException {
-
-    String sql = String.format("DELETE FROM \"User\" WHERE username = '%s'", mail);
-
-    PreparedStatement preparedStatement = null;
-
-    // remove Reservations (CASCADE DELETE)
-    removeReservations(mail);
-
-    try {
-        preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.executeUpdate();
-        System.out.println("User removed successfully.");
-    } catch (SQLException e) {
-        System.err.println("Error: " + e.getMessage());
-    } finally {
-        if (preparedStatement != null) { preparedStatement.close(); }
-    }
-
-}
 public void removeReservations(String user){}
 
 public User getUser(String username) throws SQLException, ClassNotFoundException {
@@ -103,7 +83,7 @@ public User getUser(String username) throws SQLException, ClassNotFoundException
             String surname = resultSet.getString("surname");
             String telephone = resultSet.getString("telephone");
             String password = resultSet.getString("password");
-            user = new User(username, name,surname,telephone,password);
+            user = new User(username, telephone,name,surname,password);
 
         }
     } catch (SQLException e) {
@@ -135,7 +115,7 @@ public ArrayList<User> getAllUsers() throws SQLException, ClassNotFoundException
             String username = resultSet.getString("mail");
             String telephone = resultSet.getString("telephone");
             String password = resultSet.getString("password");
-            users.add(new User(username, name,surname,telephone,password));
+            users.add(new User(username, telephone,name,surname,password));
         }
     } catch (SQLException e) {
         System.err.println("Error: " + e.getMessage());
@@ -147,4 +127,31 @@ public ArrayList<User> getAllUsers() throws SQLException, ClassNotFoundException
     return users;
 
 }
+public void removeUser(String username) throws SQLException, ClassNotFoundException {
+    Connection con = ConnectionManager.getInstance().getConnection();
+    String sql = String.format("DELETE FROM users WHERE mail = '%s'", username);
+    try{
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.executeUpdate();
+        ps.close();
+        removeReservations(username);
+        System.out.println("User removed successfully");
+    }catch (SQLException e){
+        System.err.println("Error occurred while removing from database: " + e.getMessage());
+    }
 }
+
+public void updatePassword(String username, String newPassword) throws SQLException, ClassNotFoundException {
+    Connection con = ConnectionManager.getInstance().getConnection();
+    String sql = String.format("UPDATE users SET password = '%s' WHERE mail='%s'",newPassword, username);
+    try{
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.executeUpdate();
+        ps.close();
+        System.out.println("Password has been successfully updated");
+    }catch (SQLException e){
+        System.err.println("Error occurred while updating the database: " + e.getMessage());
+    }
+}
+}
+

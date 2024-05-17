@@ -36,7 +36,7 @@ CREATE TABLE PaymentMethods (
 -- Creazione della tabella Prenotazione
 CREATE TABLE Reservation (
     userId VARCHAR(50) REFERENCES Users(mail),
-    postazione INT REFERENCES Postation(number),
+    postation INT REFERENCES Postation(number),
     date TIMESTAMP,
     pagamento INT DEFAULT 0 REFERENCES PaymentMethods(id),
 	PRIMARY KEY(postazione, date)
