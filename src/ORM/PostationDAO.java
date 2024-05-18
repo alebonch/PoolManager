@@ -5,11 +5,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import DomainModel.Position;
+import DomainModel.Postation;
 
-public class PositionDAO{
+public class PostationDAO{
     private Connection connection;
-    public PositionDAO() {
+    public PostationDAO() {
 
         try {
             this.connection = ConnectionManager.getInstance().getConnection();
@@ -18,7 +18,7 @@ public class PositionDAO{
         }
 
     }
-    public void insertPosition(int number , int type, String zone)
+    public void insertPostation(int number , int type, String zone)
             throws SQLException, ClassNotFoundException {
         String sql = String.format("INSERT INTO Postation (number, type, zone, availability)" +
                 "VALUES ('%d', '%d', '%s', true)",number, type, zone);
@@ -32,28 +32,28 @@ public class PositionDAO{
         }
     }
 
-    public ArrayList<Position> selectAllPositions() throws SQLException, ClassNotFoundException {
+    public ArrayList<Postation> selectAllPostations() throws SQLException, ClassNotFoundException {
         String sql = "SELECT * FROM Postation";
-        return SelectPosition(sql);
+        return SelectPostation(sql);
     }
 
-    public ArrayList<Position> selectAvailablePositions() throws SQLException, ClassNotFoundException {
+    public ArrayList<Postation> selectAvailablePostations() throws SQLException, ClassNotFoundException {
         String sql = "SELECT * FROM Postation WHERE availability";
-        return SelectPosition(sql);
+        return SelectPostation(sql);
     }
 
-    private ArrayList<Position> SelectPosition(String sql) throws SQLException, ClassNotFoundException {
+    private ArrayList<Postation> SelectPostation(String sql) throws SQLException, ClassNotFoundException {
         PreparedStatement ps = connection.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
 
-        ArrayList<Position> positions = new ArrayList<>();
+        ArrayList<Postation> positions = new ArrayList<>();
         while (rs.next()) {
             int number = rs.getInt("number");
             int type = rs.getInt("type");
             String zone = rs.getString("zone");
             boolean available = rs.getBoolean("availability");
             TypologyDAO typo= new TypologyDAO();
-            Position pos = new Position(number, typo.getTypology(type), zone, available);
+            Postation pos = new Postation(number, typo.getTypology(type), zone, available);
             positions.add(pos);
         }
         ps.close();
@@ -72,20 +72,47 @@ public class PositionDAO{
         }
     }
 
-    public Position getPosition(int id) throws SQLException, ClassNotFoundException {
+    public Postation getPostation(int id) throws SQLException, ClassNotFoundException {
         Connection con = ConnectionManager.getInstance().getConnection();
-        String sql = String.format("SELECT * FROM Postation  WHERE number='%d'", id);
+        String sql = String.format("SELECT * FROM Postation  WHERE number = '%d'", id);
         PreparedStatement ps = con.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
-        Position position = null;
+        Postation position = null;
         if (rs.next()) {
             int number = rs.getInt("number");
             int type = rs.getInt("type");
             String zone = rs.getString("zone");
             TypologyDAO typo=new TypologyDAO();
-            position = new Position(number, typo.getTypology(type), zone);
+            position = new Postation(number, typo.getTypology(type), zone);
 
         }
         return position;
+    }
+    public void updatePostation(String sql, String msg) throws SQLException, ClassNotFoundException{
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
+            System.out.println(msg);
+        } catch (SQLException e) {
+            System.err.println("Error: " + e.getMessage());
+        } finally {
+            if (preparedStatement != null) { preparedStatement.close(); }
+        }
+    }
+    public void updateTypology(int id, int posId) throws ClassNotFoundException, SQLException{
+        String sql = String.format("UPDATE Postation SET type = %d WHERE number = %d", id, posId); 
+        String msg = "Typology correctly updated";
+        updatePostation(sql, msg);
+    }
+    public void updateZone(int id, String zone) throws ClassNotFoundException, SQLException{
+        String sql = String.format("UPDATE Postation SET zone = %s WHERE number = %d", zone, id); 
+        String msg = "Zone correctly updated";
+        updatePostation(sql, msg);
+    }
+    public void updateAvailability(int id, boolean availability)throws ClassNotFoundException, SQLException{
+        String sql = String.format("UPDATE Postation SET availability = %b WHERE number = %d", availability, id); 
+        String msg = "Availability correctly updated";
+        updatePostation(sql, msg);
     }
 }

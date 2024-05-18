@@ -83,4 +83,41 @@ public class TypologyDAO {
         }
         return typology;
     }
+    public void updateTypology(String sql, String msg) throws SQLException, ClassNotFoundException{
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
+            System.out.println(msg);
+        } catch (SQLException e) {
+            System.err.println("Error: " + e.getMessage());
+        } finally {
+            if (preparedStatement != null) { preparedStatement.close(); }
+        }
+    }
+    public void updateSunbeds(int code, int n_sunbeds) throws ClassNotFoundException, SQLException{
+        String sql = String.format("UPDATE Typology SET n_sunbeds = %d WHERE code = %d", n_sunbeds, code); 
+        String msg = "Sunbeds correctly updated";
+        updateTypology(sql, msg);
+    }
+    public void updateDeckchairs(int code, int n_deckchairs) throws ClassNotFoundException, SQLException{
+        String sql = String.format("UPDATE Typology SET n_deckchairs = %d WHERE code = %d", n_deckchairs, code); 
+        String msg = "Deckchairs correctly updated";
+        updateTypology(sql, msg);
+    }
+    public void updateChairs(int code, int n_chairs) throws ClassNotFoundException, SQLException{
+        String sql = String.format("UPDATE Typology SET n_chairs = %d WHERE code = %d", n_chairs, code); 
+        String msg = "Chairs correctly updated";
+        updateTypology(sql, msg);
+    }
+    public void updateMaterialSunbeds(int code, String m_sunbeds) throws ClassNotFoundException, SQLException{
+        String sql = String.format("UPDATE Typology SET m_sunbeds = %s WHERE code = %d", m_sunbeds, code); 
+        String msg = "Material of sunbeds correctly updated";
+        updateTypology(sql, msg);
+    }
+    public void updateGazebo(int code, boolean gazebo) throws ClassNotFoundException, SQLException{
+        String sql = String.format("UPDATE Typology SET gazebo = %b WHERE code = %d", gazebo, code); 
+        String msg = "Gazebo correctly updated";
+        updateTypology(sql, msg);
+    }
 }

@@ -1,18 +1,18 @@
 package DomainModel;
 
-public class Position{
+public class Postation{
     private int id;
     private Typology typo;
     private String zone;
     private boolean availability;
 
-    public Position(int id, Typology type, String zone, boolean availability){
+    public Postation(int id, Typology type, String zone, boolean availability){
         this.id=id;
         this.typo=type;
         this.zone=zone;
         this.availability=availability;
     }
-    public Position(int id, Typology type, String zone){
+    public Postation(int id, Typology type, String zone){
         this.id=id;
         this.typo=type;
         this.zone=zone;
@@ -52,6 +52,9 @@ public class Position{
         else{
             availability=true;
         }
+    }
+    public void changeZone(String zone){
+        this.zone = zone;
     }
     public boolean getAvailability(){
         return availability;

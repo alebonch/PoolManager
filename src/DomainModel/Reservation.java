@@ -2,25 +2,25 @@ package DomainModel;
 
 public class Reservation {
     private User user;
-    private Position posto;
+    private Postation posto;
     private String data;
     private PaymentMethods pm;
     private String hourOfArrival;
-    public Reservation(User user, Position postazione, PaymentMethods paymentMethods,String data, String hourOfArrival){
+    public Reservation(User user, Postation postazione, PaymentMethods paymentMethods,String data, String hourOfArrival){
         this.user=user;
         this.posto=postazione;
         this.pm=paymentMethods;
         this.data=data;
         this.hourOfArrival= hourOfArrival;
     }
-    public Reservation(User user, Position postazione, PaymentMethods paymentMethods,String data){
+    public Reservation(User user, Postation postazione, PaymentMethods paymentMethods,String data){
         this.user=user;
         this.posto=postazione;
         this.pm=paymentMethods;
         this.data=data;
         this.hourOfArrival = "Not inserted";
     }
-    public Reservation(User user, Position postazione,String data){
+    public Reservation(User user, Postation postazione,String data){
         this.user=user;
         this.posto=postazione;
         this.pm = null;
@@ -42,7 +42,7 @@ public class Reservation {
     public String getData(){
         return data;
     }
-    public Position getPosto(){
+    public Postation getPosto(){
         return posto;
     }
     public PaymentMethods getPm(){

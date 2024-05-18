@@ -103,9 +103,9 @@ public class ReservationDAO {
             String userId = rs.getString("userId");
             UserDAO userDAO = new UserDAO();
             int postation = rs.getInt("postation");
-            PositionDAO positionDAO = new PositionDAO();
+            PostationDAO positionDAO = new PostationDAO();
             String date = rs.getString("date");
-            Reservation reservation = new Reservation(userDAO.getUser(userId), positionDAO.getPosition(postation), date);
+            Reservation reservation = new Reservation(userDAO.getUser(userId), positionDAO.getPostation(postation), date);
             reservations.add(reservation);
         }
         ps.close();
@@ -129,6 +129,10 @@ public class ReservationDAO {
     }
     public ArrayList<Reservation> SelectReservationsByPostation(int postation) throws SQLException, ClassNotFoundException{
         String sql= String.format("SELECT * FROM Reservation WHERE postation = %d", postation);
+        return SelectReservations(sql);
+    }
+    public ArrayList<Reservation> SelectReservationsByPostationAndDate(int postation, String date) throws SQLException, ClassNotFoundException{
+        String sql= String.format("SELECT * FROM Reservation WHERE postation = %d AND date = %s", postation, date);
         return SelectReservations(sql);
     }
 }

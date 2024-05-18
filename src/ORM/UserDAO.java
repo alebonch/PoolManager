@@ -18,7 +18,7 @@ public class UserDAO {
     }
     public void insertUser(String name, String surname, String telephone, String mail, String password)
         throws SQLException, ClassNotFoundException {
-        String sql = String.format("INSERT INTO users (mail, password, name, surname, telephone) VALUES "+
+        String sql = String.format("INSERT INTO Users (mail, password, name, surname, telephone) VALUES "+
                 "('%s', '%s', '%s', '%s', '%s')", mail, password, name, surname, telephone);
     try{
         PreparedStatement ps = connection.prepareStatement(sql);
@@ -31,7 +31,7 @@ public class UserDAO {
 }
 public void insertUser(String name, String surname, String mail, String password)
         throws SQLException, ClassNotFoundException {
-        String sql = String.format("INSERT INTO users (mail, password, name, surname) VALUES "+
+        String sql = String.format("INSERT INTO Users (mail, password, name, surname) VALUES "+
                 "('%s', '%s', '%s', '%s')", mail, password, name, surname);
     try{
         PreparedStatement ps = connection.prepareStatement(sql);
@@ -43,7 +43,7 @@ public void insertUser(String name, String surname, String mail, String password
 }}
 
 public User checkPassword(String username, String password) throws SQLException, ClassNotFoundException {
-    String sql = String.format("SELECT * FROM users WHERE username = '%s'", username);
+    String sql = String.format("SELECT * FROM Users WHERE username = '%s'", username);
     PreparedStatement ps = connection.prepareStatement(sql);
     ResultSet rs = ps.executeQuery();
     if (rs.next()) {
@@ -64,13 +64,13 @@ public User checkPassword(String username, String password) throws SQLException,
         return null;
     }
 }
-public void removeReservations(String user){}
+
 
 public User getUser(String username) throws SQLException, ClassNotFoundException {
 
     User user = null;
 
-    String sql = String.format("SELECT * FROM \"User\" WHERE username = '%s'", username);
+    String sql = String.format("SELECT * FROM Users WHERE username = '%s'", username);
 
     PreparedStatement preparedStatement = null;
     ResultSet resultSet = null;
@@ -101,7 +101,7 @@ public ArrayList<User> getAllUsers() throws SQLException, ClassNotFoundException
 
     ArrayList<User> users = new ArrayList<>();
 
-    String sql = String.format("SELECT * FROM \"User\" ORDER BY id ASC");
+    String sql = String.format("SELECT * FROM Users ORDER BY id ASC");
 
     PreparedStatement preparedStatement = null;
     ResultSet resultSet = null;
@@ -129,29 +129,40 @@ public ArrayList<User> getAllUsers() throws SQLException, ClassNotFoundException
 }
 public void removeUser(String username) throws SQLException, ClassNotFoundException {
     Connection con = ConnectionManager.getInstance().getConnection();
-    String sql = String.format("DELETE FROM users WHERE mail = '%s'", username);
+    String sql = String.format("DELETE FROM Users WHERE mail = '%s'", username);
     try{
         PreparedStatement ps = con.prepareStatement(sql);
         ps.executeUpdate();
         ps.close();
-        removeReservations(username);
+        ReservationDAO reservationDAO = new ReservationDAO();
+        reservationDAO.removeAllReservationsByUser(username);
         System.out.println("User removed successfully");
     }catch (SQLException e){
         System.err.println("Error occurred while removing from database: " + e.getMessage());
     }
 }
 
-public void updatePassword(String username, String newPassword) throws SQLException, ClassNotFoundException {
-    Connection con = ConnectionManager.getInstance().getConnection();
-    String sql = String.format("UPDATE users SET password = '%s' WHERE mail='%s'",newPassword, username);
-    try{
-        PreparedStatement ps = con.prepareStatement(sql);
-        ps.executeUpdate();
-        ps.close();
-        System.out.println("Password has been successfully updated");
-    }catch (SQLException e){
-        System.err.println("Error occurred while updating the database: " + e.getMessage());
+public void updateUser(String sql, String msg) throws SQLException, ClassNotFoundException{
+    PreparedStatement preparedStatement = null;
+    try {
+        preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.executeUpdate();
+        System.out.println(msg);
+    } catch (SQLException e) {
+        System.err.println("Error: " + e.getMessage());
+    } finally {
+        if (preparedStatement != null) { preparedStatement.close(); }
     }
+}
+public void updatePassword(String mail, String newPwd) throws ClassNotFoundException, SQLException{
+    String sql = String.format("UPDATE Users SET password = %s WHERE mail = %s", newPwd, mail); 
+    String msg = "Password correctly updated";
+    updateUser(sql, msg);
+}
+public void updateTelephone(String mail, String telephone) throws ClassNotFoundException, SQLException{
+    String sql = String.format("UPDATE Users SET telephone = %s WHERE mail = %s", telephone, mail); 
+    String msg = "Telephone correctly updated";
+    updateUser(sql, msg);
 }
 }
 
