@@ -40,8 +40,26 @@ public class ReservationDAO {
         }
 
     }
+    public void addReservation(String username, int postation, String date) throws SQLException, ClassNotFoundException {
 
-    public void removeParticipation(int username, String date) throws SQLException, ClassNotFoundException {
+        String sql = String.format("INSERT INTO Reservation (userId, postation, date) " +
+                                   "VALUES (%s, %d, %s)", username, postation, date);
+
+        PreparedStatement preparedStatement = null;
+
+        try {
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
+            System.out.println("Participation added successfully.");
+        } catch (SQLException e) {
+            System.err.println("Error: " + e.getMessage());
+        } finally {
+            if (preparedStatement != null) { preparedStatement.close(); }
+        }
+
+    }
+
+    public void removeReservation(String username, String date) throws SQLException, ClassNotFoundException {
 
         String sql = String.format("DELETE FROM Reservation WHERE userId = %s AND date = %s", username, date);
 
@@ -134,5 +152,19 @@ public class ReservationDAO {
     public ArrayList<Reservation> SelectReservationsByPostationAndDate(int postation, String date) throws SQLException, ClassNotFoundException{
         String sql= String.format("SELECT * FROM Reservation WHERE postation = %d AND date = %s", postation, date);
         return SelectReservations(sql);
+    }
+    public void updatePaymentMethods(String mail, String date, int paymentMethod) throws ClassNotFoundException, SQLException{
+        String sql = String.format("UPDATE Reservation SET PaymentMethods = %d WHERE mail = %s AND date = %s", paymentMethod, mail, date); 
+        String msg = "PaymentMethods correctly updated";
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
+            System.out.println(msg);
+        } catch (SQLException e) {
+            System.err.println("Error: " + e.getMessage());
+        } finally {
+            if (preparedStatement != null) { preparedStatement.close(); }
+        }
     }
 }
