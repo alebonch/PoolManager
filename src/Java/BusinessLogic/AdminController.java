@@ -1,13 +1,11 @@
 package BusinessLogic;
+import DomainModel.*;
 import ORM.*;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import DomainModel.*;
 public class AdminController {
     //adders
     public void addPostation(int number, String zone, int type) throws SQLException, ClassNotFoundException{
@@ -148,7 +146,7 @@ public class AdminController {
 
         String sql = sql_tmp.toString();
         AdminDAO adminDAO = new AdminDAO();
-        adminDAO.generateDefaultDatabase(sql);;
+        adminDAO.generateDefaultDatabase(sql);
     }
     public void resetDatabase() throws ClassNotFoundException, SQLException{
 

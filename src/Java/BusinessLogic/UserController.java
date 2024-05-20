@@ -1,8 +1,5 @@
 package BusinessLogic;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-
 import DomainModel.Postation;
 import DomainModel.Reservation;
 import DomainModel.Typology;
@@ -11,6 +8,8 @@ import ORM.PostationDAO;
 import ORM.ReservationDAO;
 import ORM.TypologyDAO;
 import ORM.UserDAO;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class UserController {
     //metodi in comune con Admin
@@ -57,7 +56,7 @@ public class UserController {
     }
     public void updatePaymentMethods(String mail, String date, int paymentMethod) throws ClassNotFoundException, SQLException{
         ReservationDAO reservationDAO = new ReservationDAO();
-        reservationDAO.updatePaymentMethods(mail, date, paymentMethod);;
+        reservationDAO.updatePaymentMethods(mail, date, paymentMethod);
     }
     //getter
     public User getUser(String username) throws ClassNotFoundException, SQLException{

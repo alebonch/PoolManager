@@ -1,6 +1,5 @@
 package ORM;
 import DomainModel.*;
-
 import java.sql.*;
 import java.util.ArrayList;
 public class UserDAO {
@@ -21,9 +20,9 @@ public class UserDAO {
         String sql = String.format("INSERT INTO Users (mail, password, name, surname, telephone) VALUES "+
                 "('%s', '%s', '%s', '%s', '%s')", mail, password, name, surname, telephone);
     try{
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ps.executeUpdate();
-        ps.close();
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                ps.executeUpdate();
+            }
         System.out.println("User added successfully");
 }   catch (SQLException e){
         System.err.println("Error during the registration: " + e.getMessage());
@@ -34,9 +33,9 @@ public void insertUser(String name, String surname, String mail, String password
         String sql = String.format("INSERT INTO Users (mail, password, name, surname) VALUES "+
                 "('%s', '%s', '%s', '%s')", mail, password, name, surname);
     try{
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ps.executeUpdate();
-        ps.close();
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                ps.executeUpdate();
+            }
         System.out.println("User added successfully");
 }   catch (SQLException e){
         System.err.println("Error during the registration: " + e.getMessage());
@@ -131,9 +130,9 @@ public void removeUser(String username) throws SQLException, ClassNotFoundExcept
     Connection con = ConnectionManager.getInstance().getConnection();
     String sql = String.format("DELETE FROM Users WHERE mail = '%s'", username);
     try{
-        PreparedStatement ps = con.prepareStatement(sql);
-        ps.executeUpdate();
-        ps.close();
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.executeUpdate();
+        }
         ReservationDAO reservationDAO = new ReservationDAO();
         reservationDAO.removeAllReservationsByUser(username);
         System.out.println("User removed successfully");
@@ -143,15 +142,11 @@ public void removeUser(String username) throws SQLException, ClassNotFoundExcept
 }
 
 public void updateUser(String sql, String msg) throws SQLException, ClassNotFoundException{
-    PreparedStatement preparedStatement = null;
-    try {
-        preparedStatement = connection.prepareStatement(sql);
+    try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
         preparedStatement.executeUpdate();
         System.out.println(msg);
     } catch (SQLException e) {
         System.err.println("Error: " + e.getMessage());
-    } finally {
-        if (preparedStatement != null) { preparedStatement.close(); }
     }
 }
 public void updatePassword(String mail, String newPwd) throws ClassNotFoundException, SQLException{

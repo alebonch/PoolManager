@@ -46,12 +46,7 @@ public class Postation{
         this.typo=typo;
     }
     public void changeAvailability(){
-        if (availability){
-            availability=false;
-        }
-        else{
-            availability=true;
-        }
+        availability = !availability;
     }
     public void changeZone(String zone){
         this.zone = zone;
