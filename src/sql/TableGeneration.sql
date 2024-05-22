@@ -4,11 +4,11 @@ CREATE TABLE Users (
     password VARCHAR(50) NOT NULL,
     name VARCHAR(50) NOT NULL,
     surname VARCHAR(50) NOT NULL,
-	telephone VARCHAR(10)
+	telephone VARCHAR(50)
 );
 -- Creazione della Tipologia
 CREATE TABLE Typology (
-    code INT PRIMARY KEY,
+    typename VARCHAR(50) PRIMARY KEY,
     n_sunbeds INT,
     n_chairs INT,
     n_deckchairs INT,
@@ -31,7 +31,7 @@ CREATE TABLE PaymentMethods (
 CREATE TABLE Reservation (
     userId VARCHAR(50) REFERENCES Users(mail),
     postation INT REFERENCES Postation(number),
-    date TIMESTAMP,
+    date VARCHAR(50),
     PaymentMethods INT DEFAULT 0 REFERENCES PaymentMethods(id),
 	PRIMARY KEY(postazione, date)
 );

@@ -9,7 +9,9 @@ public class UserDAO {
     public UserDAO() {
 
         try {
+            System.out.println("PROVA CONNESSIONE");
             this.connection = ConnectionManager.getInstance().getConnection();
+            System.out.println("STABILITA CONNESSIONE");
         } catch (SQLException | ClassNotFoundException e) {
             System.err.println("Error: " + e.getMessage());
         }
@@ -42,11 +44,11 @@ public void insertUser(String name, String surname, String mail, String password
 }}
 
 public User checkPassword(String username, String password) throws SQLException, ClassNotFoundException {
-    String sql = String.format("SELECT * FROM Users WHERE username = '%s'", username);
+    String sql = String.format("SELECT * FROM Users WHERE mail = '%s'", username);
     PreparedStatement ps = connection.prepareStatement(sql);
     ResultSet rs = ps.executeQuery();
     if (rs.next()) {
-        String passwordFromDatabase = rs.getString("pwd");
+        String passwordFromDatabase = rs.getString("password");
         if (password.equals(passwordFromDatabase)) {
             System.out.println("Login Succeded!");
             String name = rs.getString("name");
@@ -69,7 +71,7 @@ public User getUser(String username) throws SQLException, ClassNotFoundException
 
     User user = null;
 
-    String sql = String.format("SELECT * FROM Users WHERE username = '%s'", username);
+    String sql = String.format("SELECT * FROM Users WHERE mail = '%s'", username);
 
     PreparedStatement preparedStatement = null;
     ResultSet resultSet = null;
@@ -100,7 +102,7 @@ public ArrayList<User> getAllUsers() throws SQLException, ClassNotFoundException
 
     ArrayList<User> users = new ArrayList<>();
 
-    String sql = String.format("SELECT * FROM Users ORDER BY id ASC");
+    String sql = String.format("SELECT * FROM Users");
 
     PreparedStatement preparedStatement = null;
     ResultSet resultSet = null;

@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS PaymentMethods cascade;
-DROP TABLE IF EXISTS Position cascade;
+DROP TABLE IF EXISTS Postation cascade;
 DROP TABLE IF EXISTS Typology cascade;
 DROP TABLE IF EXISTS Reservation cascade;
 DROP TABLE IF EXISTS Users cascade;
@@ -10,11 +10,11 @@ CREATE TABLE Users (
     password VARCHAR(50) NOT NULL,
     name VARCHAR(50) NOT NULL,
     surname VARCHAR(50) NOT NULL,
-	telephone VARCHAR(10)
+	telephone VARCHAR(50)
 );
 -- Creazione della Tipologia
 CREATE TABLE Typology (
-    code INT PRIMARY KEY,
+    typename VARCHAR(50) PRIMARY KEY,
     n_sunbeds INT,
     n_chairs INT,
     n_deckchairs INT,
@@ -24,7 +24,7 @@ CREATE TABLE Typology (
 -- Creazione della tabella Postazione
 CREATE TABLE Postation (
     number INT PRIMARY KEY NOT NULL,
-    type INT NOT NULL REFERENCES Typology(code),
+    type VARCHAR(50) NOT NULL REFERENCES Typology(typename),
     zone VARCHAR(20) NOT NULL,
     availability BOOLEAN NOT NULL
 );
@@ -37,9 +37,9 @@ CREATE TABLE PaymentMethods (
 CREATE TABLE Reservation (
     userId VARCHAR(50) REFERENCES Users(mail),
     postation INT REFERENCES Postation(number),
-    date TIMESTAMP,
+    date VARCHAR(50),
     pagamento INT DEFAULT 0 REFERENCES PaymentMethods(id),
-	PRIMARY KEY(postazione, date)
+	PRIMARY KEY(postation, date)
 );
 
-INSERT INTO Users (mail, password, name, surname, telephone) VALUES('admin@admin.com', 'admin', 'Alessandro', 'Bonciani');
+INSERT INTO Users (mail, password, name, surname) VALUES('admin@admin.com', 'admin', 'Alessandro', 'Bonciani');

@@ -1,11 +1,10 @@
 package ORM;
+import DomainModel.Postation;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import DomainModel.Postation;
 
 public class PostationDAO{
     private Connection connection;
@@ -18,10 +17,10 @@ public class PostationDAO{
         }
 
     }
-    public void insertPostation(int number , int type, String zone)
+    public void insertPostation(int number , String type, String zone)
             throws SQLException, ClassNotFoundException {
         String sql = String.format("INSERT INTO Postation (number, type, zone, availability)" +
-                "VALUES ('%d', '%d', '%s', true)",number, type, zone);
+                "VALUES ('%d', '%s', '%s', true)",number, type, zone);
         try{
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.executeUpdate();
@@ -49,7 +48,7 @@ public class PostationDAO{
         ArrayList<Postation> positions = new ArrayList<>();
         while (rs.next()) {
             int number = rs.getInt("number");
-            int type = rs.getInt("type");
+            String type = rs.getString("type");
             String zone = rs.getString("zone");
             boolean available = rs.getBoolean("availability");
             TypologyDAO typo= new TypologyDAO();
@@ -80,7 +79,7 @@ public class PostationDAO{
         Postation position = null;
         if (rs.next()) {
             int number = rs.getInt("number");
-            int type = rs.getInt("type");
+            String type = rs.getString("type");
             String zone = rs.getString("zone");
             TypologyDAO typo=new TypologyDAO();
             position = new Postation(number, typo.getTypology(type), zone);
@@ -100,8 +99,8 @@ public class PostationDAO{
             if (preparedStatement != null) { preparedStatement.close(); }
         }
     }
-    public void updateTypology(int id, int posId) throws ClassNotFoundException, SQLException{
-        String sql = String.format("UPDATE Postation SET type = %d WHERE number = %d", id, posId); 
+    public void updateTypology(String id, int posId) throws ClassNotFoundException, SQLException{
+        String sql = String.format("UPDATE Postation SET type = '%s' WHERE number = %d", id, posId); 
         String msg = "Typology correctly updated";
         updatePostation(sql, msg);
     }

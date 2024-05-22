@@ -6,15 +6,20 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+/**
+ *
+ * @author alebonch
+ */
 public class AdminController {
     //adders
-    public void addPostation(int number, String zone, int type) throws SQLException, ClassNotFoundException{
+    public void addPostation(int number, String zone, String type) throws SQLException, ClassNotFoundException{
         PostationDAO postationDAO = new PostationDAO();
-        postationDAO.insertPostation(number, type, zone);
+        postationDAO.insertPostation(number, type, zone);;
     }
-    public void AddTypology(int n_chairs, int n_deckchairs, int n_sunbeds, String m_sunbeds, boolean gazebo)throws SQLException, ClassNotFoundException{
+    public void AddTypology(String id, int n_chairs, int n_deckchairs, int n_sunbeds, String m_sunbeds, boolean gazebo)throws SQLException, ClassNotFoundException{
         TypologyDAO typologyDAO = new TypologyDAO();
-        typologyDAO.insertTypology(n_chairs, m_sunbeds, n_deckchairs, n_sunbeds, gazebo);
+        typologyDAO.insertTypology(id ,n_chairs, m_sunbeds, n_deckchairs, n_sunbeds, gazebo);
     }
     public void AddUser(String mail, String name, String surname, String telephone, String password) throws SQLException, ClassNotFoundException{
         UserDAO userDAO = new UserDAO();
@@ -33,7 +38,7 @@ public class AdminController {
         PostationDAO postationDAO = new PostationDAO();
         postationDAO.removePos(number);
     }
-    public void removeTypology(int id)throws SQLException, ClassNotFoundException{
+    public void removeTypology(String id)throws SQLException, ClassNotFoundException{
         TypologyDAO typologyDAO = new TypologyDAO();
         typologyDAO.removeTypology(id);
     }
@@ -49,7 +54,15 @@ public class AdminController {
         ReservationDAO reservationDAO = new ReservationDAO();
         reservationDAO.removeAllReservationsByDate(date);
     }
+    public void removeAllReservationsByUser(String username) throws ClassNotFoundException, SQLException{
+        ReservationDAO reservationDAO = new ReservationDAO();
+        reservationDAO.removeAllReservationsByUser(username);
+    }
     //getters
+    public Typology getTypology(String name) throws  ClassNotFoundException, SQLException{
+        TypologyDAO typologyDAO = new TypologyDAO();
+        return typologyDAO.getTypology(name);
+    }
     public ArrayList<User> getAllUsers() throws ClassNotFoundException, SQLException{
         UserDAO userDAO = new UserDAO();
         return userDAO.getAllUsers();
@@ -94,34 +107,39 @@ public class AdminController {
         ReservationDAO reservationDAO = new ReservationDAO();
         return reservationDAO.SelectReservationsByPostationAndDate(pos, date);
     }
+    public ArrayList<Typology> getAllTypologies() throws SQLException, ClassNotFoundException{
+        TypologyDAO typologyDAO = new TypologyDAO();
+        return  typologyDAO.selectAllTypologies();
+    }
     // updaters
-    public void updateSunbeds(int code, int n) throws ClassNotFoundException, SQLException{
+    public void updateSunbeds(String code, int n) throws ClassNotFoundException, SQLException{
         TypologyDAO typologyDAO = new TypologyDAO();
         typologyDAO.updateSunbeds(code,n);
     }
-    public void updateDeckchairs(int code, int n) throws ClassNotFoundException, SQLException{
+    public void updateDeckchairs(String code, int n) throws ClassNotFoundException, SQLException{
         TypologyDAO typologyDAO = new TypologyDAO();
         typologyDAO.updateDeckchairs(code,n);
     }
-    public void updateChairs(int code, int n) throws ClassNotFoundException, SQLException{
+    public void updateChairs(String code, int n) throws ClassNotFoundException, SQLException{
         TypologyDAO typologyDAO = new TypologyDAO();
         typologyDAO.updateChairs(code,n);
     }
-    public void updateMaterialSunbeds(int code, String material) throws ClassNotFoundException, SQLException{
+    public void updateMaterialSunbeds(String code, String material) throws ClassNotFoundException, SQLException{
         TypologyDAO typologyDAO = new TypologyDAO();
         typologyDAO.updateMaterialSunbeds(code,material);
     }
-    public void updateGazebo(int code, boolean gazebo) throws ClassNotFoundException, SQLException{
+    public void updateGazebo(String code) throws ClassNotFoundException, SQLException{
         TypologyDAO typologyDAO = new TypologyDAO();
-        typologyDAO.updateGazebo(code,gazebo);
+        Typology typology = typologyDAO.getTypology(code);
+        typologyDAO.updateGazebo(code,typology.getGazebo());
     }
     public void updateZone(int number, String zone) throws ClassNotFoundException, SQLException{
         PostationDAO postationDAO = new PostationDAO();
         postationDAO.updateZone(number, zone);
     }
-    public void updateTypology(int number, int posId) throws ClassNotFoundException, SQLException{
+    public void updateTypology(String typo, int posId) throws ClassNotFoundException, SQLException{
         PostationDAO postationDAO = new PostationDAO();
-        postationDAO.updateTypology(number, posId);
+        postationDAO.updateTypology(typo, posId);;
     }
     public void updateAvailability(int posId, boolean available) throws ClassNotFoundException, SQLException{
         PostationDAO postationDAO = new PostationDAO();
