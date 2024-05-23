@@ -7,7 +7,7 @@ INSERT INTO Users (mail, password, name, surname, telephone) VALUES
 ('charlie.davis@example.com', 'passworddef', 'Charlie', 'Davis', '3344556677');
 
 -- Insert 3 Typology
-INSERT INTO Typology (typename, n_sunbeds, n_chairs, n_deckchairs, m_sunbeds, gazebo) VALUES
+INSERT INTO Typology (c, n_sunbeds, n_chairs, n_deckchairs, m_sunbeds, gazebo) VALUES
 ('standard', 2, 4, 1, 'plastica', TRUE),
 ('luxury', 1, 2, 2, 'legno', FALSE),
 ('premium', 3, 6, 3, 'tela', TRUE);
