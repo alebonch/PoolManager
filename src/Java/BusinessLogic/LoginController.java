@@ -5,12 +5,8 @@ import ORM.UserDAO;
 import java.sql.SQLException;
 
 public class LoginController {
-    public LoginController(){
-        System.out.println("PROVA CONNESSIONE LOGIN");
-    }
-    public void print(){
-        System.out.println("PROVA LOGIN");
-    }
+    public LoginController(){}
+
     public User register(String username, String pwd, String name, String surname) throws ClassNotFoundException, SQLException{
         UserDAO userDAO = new UserDAO();
         userDAO.insertUser(name, surname, username, pwd);

@@ -24,7 +24,6 @@ public class ConnectionManager {
     }
 
     public Connection getConnection() throws SQLException, ClassNotFoundException {
-        System.out.println("Entrati in getConnection()");
 
         if (connection == null){
             try {

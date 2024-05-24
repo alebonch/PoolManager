@@ -20,7 +20,6 @@ public class Main {
     private static void handleLoginAction() throws ClassNotFoundException, SQLException{
         Scanner scanner = new Scanner(System.in);
         LoginController loginController = new LoginController();
-        loginController.print();
         String input;
 
         do {
@@ -409,7 +408,7 @@ public class Main {
                      3. View all reservations by user
                      4. View all reservations by date
                      5. View all reservations
-                     6. Back to Admin menu
+                     6. Back to Reservation menu
                    \s"""
             );
             input = scanner.nextLine();
@@ -543,9 +542,9 @@ public class Main {
             input = scanner.nextLine();
             switch (input) {
                 case "1" -> {
-                    ArrayList<Postation> postations = userController.getAvailablePostations();
-                    for (Postation postation : postations) {
-                        System.out.println(postation.getInfo());
+                    ArrayList<Reservation> reservations = userController.getUserReservations(user.getMail());
+                    for (Reservation reservation : reservations) {
+                        System.out.println(reservation.getInfo());
                     }
                 }
                 case "2" -> {
@@ -718,3 +717,7 @@ public class Main {
 
     } 
 }
+
+//javac -cp ../../lib/postgresql-42.7.3.jar -d ../../out BusinessLogic/*.java DomainModel/*.java ORM/*.java Main.java
+
+//java -cp ../../out:../../lib/postgresql-42.7.3.jar Main

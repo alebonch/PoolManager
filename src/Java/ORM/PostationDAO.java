@@ -32,12 +32,12 @@ public class PostationDAO{
     }
 
     public ArrayList<Postation> selectAllPostations() throws SQLException, ClassNotFoundException {
-        String sql = "SELECT * FROM Postation";
+        String sql = "SELECT * FROM Postation ORDER BY number";
         return SelectPostation(sql);
     }
 
     public ArrayList<Postation> selectAvailablePostations() throws SQLException, ClassNotFoundException {
-        String sql = "SELECT * FROM Postation WHERE availability";
+        String sql = "SELECT * FROM Postation WHERE availability ORDER BY number";
         return SelectPostation(sql);
     }
 
@@ -87,7 +87,7 @@ public class PostationDAO{
         }
         return position;
     }
-    public void updatePostation(String sql, String msg) throws SQLException, ClassNotFoundException{
+    private void updatePostation(String sql, String msg) throws SQLException, ClassNotFoundException{
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = connection.prepareStatement(sql);

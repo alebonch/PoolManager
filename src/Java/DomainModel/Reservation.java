@@ -2,58 +2,43 @@ package DomainModel;
 
 public class Reservation {
     private User user;
-    private Postation posto;
-    private String data;
+    private Postation postation;
+    private String date;
     private PaymentMethods pm;
-    private String hourOfArrival;
-    public Reservation(User user, Postation postazione, PaymentMethods paymentMethods,String data, String hourOfArrival){
-        this.user=user;
-        this.posto=postazione;
-        this.pm=paymentMethods;
-        this.data=data;
-        this.hourOfArrival= hourOfArrival;
-    }
     public Reservation(User user, Postation postazione, PaymentMethods paymentMethods,String data){
         this.user=user;
-        this.posto=postazione;
+        this.postation=postazione;
         this.pm=paymentMethods;
-        this.data=data;
-        this.hourOfArrival = "Not inserted";
+        this.date=data;
     }
     public Reservation(User user, Postation postazione,String data){
         this.user=user;
-        this.posto=postazione;
+        this.postation=postazione;
         this.pm = null;
-        this.data=data;
-        this.hourOfArrival = "Not inserted";
-    }
-
-    public String getHour(){
-        return hourOfArrival;
-    }
-
-    public void setHour(String hour){
-        this.hourOfArrival=hour;
+        this.date=data;
     }
 
     public User getUser(){
         return user;
     }
     public String getData(){
-        return data;
+        return date;
     }
     public Postation getPosto(){
-        return posto;
+        return postation;
     }
     public PaymentMethods getPm(){
         return pm;
     }
     public String getInfo(){
-        String info=user.getInfo();
-        info += posto.getInfo();
-        info+=pm.getInfo();
-        info+= String.format("Date: %s  Hour of arrival: %s",
-                data, hourOfArrival);
+        String info=("| "+user.getMail()+" |");
+        info += String.format(" Postation: %d |", postation.getId());
+        if(pm!=null)
+            info+=pm.getInfo();
+        else
+            info+=" Payment method: Not inserted |";
+        info+= String.format(" Date: %s | ",
+                date);
         return info;
     }
 }

@@ -9,9 +9,7 @@ public class UserDAO {
     public UserDAO() {
 
         try {
-            System.out.println("PROVA CONNESSIONE");
             this.connection = ConnectionManager.getInstance().getConnection();
-            System.out.println("STABILITA CONNESSIONE");
         } catch (SQLException | ClassNotFoundException e) {
             System.err.println("Error: " + e.getMessage());
         }

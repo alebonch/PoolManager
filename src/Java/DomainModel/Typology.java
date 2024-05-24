@@ -31,16 +31,16 @@ public class Typology {
         return m_sunbeds;
     }
     public String getInfo(){
-        String info= String.format("Id: %s ",
+        String info= String.format("| Id: %s |",
         this.id);
         if(n_chairs!=0)
-            info+=String.format("  Sedie: %d", this.n_chairs);
+            info+=String.format("  Sedie: %d |", this.n_chairs);
         if(n_deckchairs!=0)
-            info+=String.format("  Sdraio: %d", this.n_deckchairs);
+            info+=String.format("  Sdraio: %d |", this.n_deckchairs);
         if(n_sunbeds!=0)
-            info+=String.format("  Lettini di %s: %d",this.m_sunbeds, this.n_sunbeds);
+            info+=String.format("  Lettini di %s: %d |",this.m_sunbeds, this.n_sunbeds);
         if(gazebo)
-            info += "   Gazebo";
+            info += "   Gazebo |";
         return info;
     }
 }

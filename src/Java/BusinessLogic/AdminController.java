@@ -154,7 +154,8 @@ public class AdminController {
         resetDatabase();
 
         StringBuilder sql_tmp = new StringBuilder();
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader("src/sql/default.sql"))) {
+
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader("../sql/default.sql"))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) { sql_tmp.append(line).append("\n"); }
         } catch (IOException e) {
@@ -169,7 +170,8 @@ public class AdminController {
     public void resetDatabase() throws ClassNotFoundException, SQLException{
 
             StringBuilder sql_tmp = new StringBuilder();
-            try (BufferedReader bufferedReader = new BufferedReader(new FileReader("src/sql/reset.sql"))) {
+
+            try (BufferedReader bufferedReader = new BufferedReader(new FileReader("../sql/reset.sql"))) {
                 String line;
                 while ((line = bufferedReader.readLine()) != null) { sql_tmp.append(line).append("\n"); }
             } catch (IOException e) {

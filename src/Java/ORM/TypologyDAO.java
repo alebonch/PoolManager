@@ -16,7 +16,7 @@ public class TypologyDAO {
     public void insertTypology(String name, int n_chairs, String m_sunbeds, int n_deckchairs, int n_sunbeds, boolean gazebo)
             throws SQLException, ClassNotFoundException {
         String sql = String.format("INSERT INTO Typology (typename, n_sunbeds, n_chairs, n_deckchairs, m_sunbeds, gazebo)" +
-                "VALUES ('%s','%d','%d', '%d', '%s', true)",name,n_sunbeds, n_chairs, n_deckchairs,m_sunbeds,gazebo);
+                "VALUES ('%s','%d','%d', '%d', '%s', '%b')",name,n_sunbeds, n_chairs, n_deckchairs,m_sunbeds,gazebo);
         try{
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.executeUpdate();

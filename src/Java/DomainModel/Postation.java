@@ -20,14 +20,14 @@ public class Postation{
     }
 
     public String getInfo(){
-        String info = String.format("ID: %d   Typology: %d   Zone: %s  ",
-                id, typo, zone);
+        String info = String.format("| ID: %d  |  Zone: '%s'  ",
+                id,  zone);
         info += typo.getInfo();
         if (availability){
-            info += " Postation is usable";
+            info += " Postation is usable |";
         }
         else{
-            info += " Postation is under maintenance";
+            info += " Postation is under maintenance |";
         }
         return info;
     }
