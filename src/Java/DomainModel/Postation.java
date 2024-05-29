@@ -1,57 +1,37 @@
 package DomainModel;
+import DomainModel.Object;
+import java.util.ArrayList;
 
 public class Postation{
     private int id;
-    private Typology typo;
-    private String zone;
-    private boolean availability;
+    private ArrayList<Object> objects;
+    private Location location;
 
-    public Postation(int id, Typology type, String zone, boolean availability){
+    public Postation(int id, ArrayList<Object> type, Location zone){
         this.id=id;
-        this.typo=type;
-        this.zone=zone;
-        this.availability=availability;
-    }
-    public Postation(int id, Typology type, String zone){
-        this.id=id;
-        this.typo=type;
-        this.zone=zone;
-        this.availability=true;
+        this.objects=type;
+        this.location=zone;
     }
 
     public String getInfo(){
-        String info = String.format("| ID: %d  |  Zone: '%s'  ",
-                id,  zone);
-        info += typo.getInfo();
-        if (availability){
-            info += " Postation is usable |";
-        }
-        else{
-            info += " Postation is under maintenance |";
+        String info = String.format("| ID: %d ",
+                id);
+        info += location.getInfo();
+        for (Object object : objects) {
+            info+=object.getInfo();   
         }
         return info;
     }
-
-    public Typology getTypo(){
-        return typo;
+    public ArrayList<Object> getObjects(){
+        return objects;
     }
     public int getId(){
         return id;
     }
-    public String getZone(){
-        return zone;
+    public Location getLocation(){
+        return location;
     }
-
-    public void setTypo(Typology typo){
-        this.typo=typo;
-    }
-    public void changeAvailability(){
-        availability = !availability;
-    }
-    public void changeZone(String zone){
-        this.zone = zone;
-    }
-    public boolean getAvailability(){
-        return availability;
+    public void addObject(Object object){
+        objects.add(object);
     }
 }

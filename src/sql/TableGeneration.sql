@@ -6,32 +6,36 @@ CREATE TABLE Users (
     surname VARCHAR(50) NOT NULL,
 	telephone VARCHAR(50)
 );
--- Creazione della Tipologia
-CREATE TABLE Typology (
-    typename VARCHAR(50) PRIMARY KEY,
-    n_sunbeds INT,
-    n_chairs INT,
-    n_deckchairs INT,
-    m_sunbeds VARCHAR(20),
-    gazebo BOOLEAN
+-- Creazione degli oggetti
+CREATE TABLE Object (
+    name VARCHAR(50) PRIMARY KEY,
+    totalnumber INT NOT NULL,
+    price INT NOT NULL,
+    material VARCHAR(50),
+    color VARCHAR(50)
 );
+-- Creazione della tabella Locazione
+CREATE TABLE Location(
+    id INT PRIMARY KEY,
+    description VARCHAR(100) 
+)
 -- Creazione della tabella Postazione
 CREATE TABLE Postation (
     number INT PRIMARY KEY NOT NULL,
-    type INT NOT NULL REFERENCES Typology(code),
-    zone VARCHAR(20) NOT NULL,
+    type VARCHAR(50) NOT NULL REFERENCES Object(name),
+    zone INT NOT NULL REFERENCES Location(id),
     availability BOOLEAN NOT NULL
-);
--- Creazione della tabella Metodi di Pagamento
-CREATE TABLE PaymentMethods (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL
 );
 -- Creazione della tabella Prenotazione
 CREATE TABLE Reservation (
     userId VARCHAR(50) REFERENCES Users(mail),
     postation INT REFERENCES Postation(number),
-    date VARCHAR(50),
-    PaymentMethods INT DEFAULT 0 REFERENCES PaymentMethods(id),
+    date VARCHAR(50) REFERENCES TimeRecord(date),
 	PRIMARY KEY(postazione, date)
 );
+CREATE TABLE TimeRecord (
+    date VARCHAR(50),
+    turno VARCHAR(50),
+    PRIMARY KEY(date, turno)
+)
+

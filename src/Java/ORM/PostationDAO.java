@@ -17,9 +17,9 @@ public class PostationDAO{
         }
 
     }
-    public void insertPostation(int number , String type, String zone)
+    public void insertPostation(int number , String type, int  zone)
             throws SQLException, ClassNotFoundException {
-        String sql = String.format("INSERT INTO Postation (number, type, zone, availability)" +
+        String sql = String.format("INSERT INTO Postation (number, type, zone)" +
                 "VALUES ('%d', '%s', '%s', true)",number, type, zone);
         try{
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -36,31 +36,33 @@ public class PostationDAO{
         return SelectPostation(sql);
     }
 
-    public ArrayList<Postation> selectAvailablePostations() throws SQLException, ClassNotFoundException {
-        String sql = "SELECT * FROM Postation WHERE availability ORDER BY number";
-        return SelectPostation(sql);
-    }
-
     private ArrayList<Postation> SelectPostation(String sql) throws SQLException, ClassNotFoundException {
         PreparedStatement ps = connection.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
-
+        ArrayList<Integer> ids = new ArrayList<>();
         ArrayList<Postation> positions = new ArrayList<>();
         while (rs.next()) {
             int number = rs.getInt("number");
             String type = rs.getString("type");
-            String zone = rs.getString("zone");
-            boolean available = rs.getBoolean("availability");
-            TypologyDAO typo= new TypologyDAO();
-            Postation pos = new Postation(number, typo.getTypology(type), zone, available);
-            positions.add(pos);
+            ObjectDAO objectDAO = new ObjectDAO();
+            int zone = rs.getInt("zone");
+            LocationDAO locationDAO = new LocationDAO();
+            if(!ids.contains(number)){
+                ids.add(number);
+                Postation pos = new Postation(number, objectDAO.getObject(type), locationDAO.getLocation(zone).get(0));
+                positions.add(pos);
+            }
+            else{
+                int id=getPosId(positions, number);  
+                positions.get(id).addObject(objectDAO.getObject(type).get(0));
+            }
         }
         ps.close();
         return positions;
     }
 
     public void removePos(int id) throws SQLException, ClassNotFoundException {
-        String sql = String.format("DELETE FROM cars_view WHERE number = '%d'",id);
+        String sql = String.format("DELETE FROM Postation WHERE number = '%d'",id);
         try{
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.executeUpdate();
@@ -80,9 +82,10 @@ public class PostationDAO{
         if (rs.next()) {
             int number = rs.getInt("number");
             String type = rs.getString("type");
-            String zone = rs.getString("zone");
-            TypologyDAO typo=new TypologyDAO();
-            position = new Postation(number, typo.getTypology(type), zone);
+            int zone = rs.getInt("zone");
+            LocationDAO locationDAO = new LocationDAO();
+            ObjectDAO objectDAO = new ObjectDAO();
+            position = new Postation(number, objectDAO.getObject(type), locationDAO.getLocation(zone).get(0));
 
         }
         return position;
@@ -113,5 +116,15 @@ public class PostationDAO{
         String sql = String.format("UPDATE Postation SET availability = %b WHERE number = %d", availability, id); 
         String msg = "Availability correctly updated";
         updatePostation(sql, msg);
+    }
+    public int getPosId(ArrayList<Postation> postations, int number){
+        int i=0;
+        for(Postation postation:postations){
+            if(postation.getId()==number){
+                return i;
+            }
+            i++;
+        }
+        return i;
     }
 }

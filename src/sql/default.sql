@@ -6,12 +6,6 @@ INSERT INTO Users (mail, password, name, surname, telephone) VALUES
 ('bob.brown@example.com', 'passwordabc', 'Bob', 'Brown', '2233445566'),
 ('charlie.davis@example.com', 'passworddef', 'Charlie', 'Davis', '3344556677');
 
--- Insert 3 Typology
-INSERT INTO Typology (typename, n_sunbeds, n_chairs, n_deckchairs, m_sunbeds, gazebo) VALUES
-('standard', 2, 4, 1, 'plastica', TRUE),
-('luxury', 1, 2, 2, 'legno', FALSE),
-('premium', 3, 6, 3, 'tela', TRUE);
-
 -- Insert 15 Postation
 INSERT INTO Postation (number, type, zone, availability) VALUES
 (1, 'standard', 'North', TRUE),
@@ -29,9 +23,6 @@ INSERT INTO Postation (number, type, zone, availability) VALUES
 (13, 'standard', 'West', TRUE),
 (14, 'standard', 'West', TRUE),
 (15, 'standard', 'West', TRUE);
-INSERT INTO PaymentMethods(id,name) VALUES
-	(0,'Paypal'),
-	(1,'Cash');
 
 -- Insert 2 Reservations
 INSERT INTO Reservation (userId, postation,date) VALUES
