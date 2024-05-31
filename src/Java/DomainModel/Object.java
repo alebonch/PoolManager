@@ -28,7 +28,9 @@ public abstract class Object{
             System.out.printf("%d) " + object.getInfo() +"\n", i);
             i++;
 
-    }
+    }}
+    public void setTotal(int total){
+        this.totalNumber = total;
     }
 
 }

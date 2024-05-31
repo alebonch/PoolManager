@@ -13,16 +13,6 @@ CREATE TABLE Users (
     surname VARCHAR(50) NOT NULL,
 	telephone VARCHAR(50)
 );
-CREATE TABLE TimeRecord (
-    date VARCHAR(50),
-    turno VARCHAR(50),
-    PRIMARY KEY(date, turno)
-)
--- Creazione della Locazione
-CREATE TABLE Location(
-    id INT PRIMARY KEY,
-    description VARCHAR(100) 
-)
 -- Creazione degli oggetti
 CREATE TABLE Object (
     name VARCHAR(50) PRIMARY KEY,
@@ -31,20 +21,31 @@ CREATE TABLE Object (
     material VARCHAR(50),
     color VARCHAR(50)
 );
+-- Creazione della tabella Locazione
+CREATE TABLE Location(
+    id INT PRIMARY KEY,
+    description VARCHAR(100) 
+)
 -- Creazione della tabella Postazione
 CREATE TABLE Postation (
     number INT PRIMARY KEY NOT NULL,
-    type VARCHAR(50) NOT NULL REFERENCES Typology(typename),
-    zone VARCHAR(20) NOT NULL,
+    type VARCHAR(50) NOT NULL REFERENCES Object(name),
+    zone INT NOT NULL REFERENCES Location(id),
     availability BOOLEAN NOT NULL
 );
 -- Creazione della tabella Prenotazione
 CREATE TABLE Reservation (
     userId VARCHAR(50) REFERENCES Users(mail),
     postation INT REFERENCES Postation(number),
-    date VARCHAR(50),
-    pagamento INT DEFAULT 0 REFERENCES PaymentMethods(id),
-	PRIMARY KEY(postation, date)
+    date INT REFERENCES TimeRecord(id),
+	PRIMARY KEY(postazione, date)
 );
+-- Creazione di Time Record
+CREATE TABLE TimeRecord (
+    id INT SERIAL PRIMARY KEY,
+    date VARCHAR(50),
+    turno VARCHAR(50),
+)
+
 
 INSERT INTO Users (mail, password, name, surname) VALUES('admin@admin.com', 'admin', 'Alessandro', 'Bonciani');

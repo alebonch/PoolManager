@@ -54,10 +54,6 @@ public class UserController {
         UserDAO userDAO = new UserDAO();
         userDAO.updateTelephone(mail, telephone);
     }
-    public void updatePaymentMethods(String mail, String date, int paymentMethod) throws ClassNotFoundException, SQLException{
-        ReservationDAO reservationDAO = new ReservationDAO();
-        reservationDAO.updatePaymentMethods(mail, date, paymentMethod);
-    }
     //getter
     public User getUser(String username) throws ClassNotFoundException, SQLException{
         UserDAO userDAO = new UserDAO();

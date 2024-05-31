@@ -21,23 +21,10 @@ public class ReservationDAO {
 
     }
 
-    public void addReservation(String username, int postation, int paymentMethod, String date) throws SQLException, ClassNotFoundException {
-
-        String sql = String.format("INSERT INTO Reservation (userId, postation, date, paymentMethods) " +
-                                   "VALUES ('%s', %d, '%s',%d)", username, postation, date, paymentMethod);
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.executeUpdate();
-            System.out.println("Participation added successfully.");
-        } catch (SQLException e) {
-            System.err.println("Error: " + e.getMessage());
-        }
-
-    }
-    public void addReservation(String username, int postation, String date) throws SQLException, ClassNotFoundException {
+    public void addReservation(String username, int postation,  int date) throws SQLException, ClassNotFoundException {
 
         String sql = String.format("INSERT INTO Reservation (userId, postation, date) " +
-                                   "VALUES ('%s', %d, '%s')", username, postation, date);
+                                   "VALUES ('%s', %d ,%d)", username, postation, date);
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.executeUpdate();
@@ -48,9 +35,9 @@ public class ReservationDAO {
 
     }
 
-    public void removeReservation(String username, String date) throws SQLException, ClassNotFoundException {
+    public void removeReservation(String username, int  date) throws SQLException, ClassNotFoundException {
 
-        String sql = String.format("DELETE FROM Reservation WHERE userId = '%s' AND date = '%s'", username, date);
+        String sql = String.format("DELETE FROM Reservation WHERE userId = '%s' AND date = '%d'", username, date);
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.executeUpdate();
@@ -74,9 +61,9 @@ public class ReservationDAO {
 
     }
 
-    public void removeAllReservationsByDate(String date) throws SQLException, ClassNotFoundException {
+    public void removeAllReservationsByDate(int  date) throws SQLException, ClassNotFoundException {
 
-        String sql = String.format("DELETE FROM Reservation WHERE date = '%s'", date);
+        String sql = String.format("DELETE FROM Reservation WHERE date = '%d'", date);
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.executeUpdate();
@@ -96,8 +83,9 @@ public class ReservationDAO {
                 UserDAO userDAO = new UserDAO();
                 int postation = rs.getInt("postation");
                 PostationDAO positionDAO = new PostationDAO();
-                String date = rs.getString("date");
-                Reservation reservation = new Reservation(userDAO.getUser(userId), positionDAO.getPostation(postation), date);
+                int date = rs.getInt("date");
+                TimeRecordDAO timeRecordDAO = new TimeRecordDAO();
+                Reservation reservation = new Reservation(userDAO.getUser(userId), positionDAO.getPostation(postation).get(0), timeRecordDAO.getTimeRecord(date).get(0));
                 reservations.add(reservation);
             }
         }
@@ -107,34 +95,24 @@ public class ReservationDAO {
         String sql= "SELECT * FROM Reservation";
         return SelectReservations(sql);
     }
-    public ArrayList<Reservation> SelectReservationsByDate(String date) throws SQLException, ClassNotFoundException{
-        String sql= String.format("SELECT * FROM Reservation WHERE date = '%s'", date);
+    public ArrayList<Reservation> SelectReservationsByDate(int date) throws SQLException, ClassNotFoundException{
+        String sql= String.format("SELECT * FROM Reservation WHERE date = '%d'", date);
         return SelectReservations(sql);
     }
     public ArrayList<Reservation> SelectReservationsByUser(String username) throws SQLException, ClassNotFoundException{
         String sql= String.format("SELECT * FROM Reservation WHERE userId = '%s'", username);
         return SelectReservations(sql);
     }
-    public ArrayList<Reservation> SelectReservationsByUserAndDate(String username, String date) throws SQLException, ClassNotFoundException{
-        String sql= String.format("SELECT * FROM Reservation WHERE userId = '%s' AND date = '%s'", username, date);
+    public ArrayList<Reservation> SelectReservationsByUserAndDate(String username, int date) throws SQLException, ClassNotFoundException{
+        String sql= String.format("SELECT * FROM Reservation WHERE userId = '%s' AND date = '%d'", username, date);
         return SelectReservations(sql);
     }
     public ArrayList<Reservation> SelectReservationsByPostation(int postation) throws SQLException, ClassNotFoundException{
         String sql= String.format("SELECT * FROM Reservation WHERE postation = %d", postation);
         return SelectReservations(sql);
     }
-    public ArrayList<Reservation> SelectReservationsByPostationAndDate(int postation, String date) throws SQLException, ClassNotFoundException{
-        String sql= String.format("SELECT * FROM Reservation WHERE postation = %d AND date = '%s'", postation, date);
+    public ArrayList<Reservation> SelectReservationsByPostationAndDate(int postation, int date) throws SQLException, ClassNotFoundException{
+        String sql= String.format("SELECT * FROM Reservation WHERE postation = %d AND date = '%d'", postation, date);
         return SelectReservations(sql);
-    }
-    public void updatePaymentMethods(String mail, String date, int paymentMethod) throws ClassNotFoundException, SQLException{
-        String sql = String.format("UPDATE Reservation SET PaymentMethods = %d WHERE mail = '%s' AND date = '%s'", paymentMethod, mail, date); 
-        String msg = "PaymentMethods correctly updated";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.executeUpdate();
-            System.out.println(msg);
-        } catch (SQLException e) {
-            System.err.println("Error: " + e.getMessage());
-        }
     }
 }

@@ -22,20 +22,24 @@ CREATE TABLE Location(
 -- Creazione della tabella Postazione
 CREATE TABLE Postation (
     number INT PRIMARY KEY NOT NULL,
-    type VARCHAR(50) NOT NULL REFERENCES Object(name),
-    zone INT NOT NULL REFERENCES Location(id),
-    availability BOOLEAN NOT NULL
+    n_chair INT,
+    n_deckchair INT,
+    n_sunbed INT,
+    n_table INT,
+    n_umbrella INT,
+    zone INT NOT NULL REFERENCES Location(id)
 );
 -- Creazione della tabella Prenotazione
 CREATE TABLE Reservation (
     userId VARCHAR(50) REFERENCES Users(mail),
     postation INT REFERENCES Postation(number),
-    date VARCHAR(50) REFERENCES TimeRecord(date),
+    date INT REFERENCES TimeRecord(id),
 	PRIMARY KEY(postazione, date)
 );
+-- Creazione di Time Record
 CREATE TABLE TimeRecord (
+    id INT SERIAL PRIMARY KEY,
     date VARCHAR(50),
     turno VARCHAR(50),
-    PRIMARY KEY(date, turno)
 )
 
