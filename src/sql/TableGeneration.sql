@@ -34,6 +34,7 @@ CREATE TABLE Reservation (
     userId VARCHAR(50) REFERENCES Users(mail),
     postation INT REFERENCES Postation(number),
     date INT REFERENCES TimeRecord(id),
+    cost INT,
 	PRIMARY KEY(postazione, date)
 );
 -- Creazione di Time Record

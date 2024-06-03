@@ -1,5 +1,4 @@
 package ORM;
-import DomainModel.Chair;
 import DomainModel.Postation;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -75,6 +74,22 @@ public class PostationDAO{
         return positions;
     }
 
+    public int[] getUsedResources(int id) throws SQLException, ClassNotFoundException{
+        String sql = String.format("SELECT * FROM Postation  WHERE number = '%d'", id);
+        int[] usedResources = null;
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            usedResources[0] = rs.getInt("n_chair"); 
+            usedResources[1] = rs.getInt("n_deckchair");
+            usedResources[2] = rs.getInt("n_sunbed"); 
+            usedResources[3] = rs.getInt("n_table"); 
+            usedResources[4]  = rs.getInt("n_umbrella");
+        }
+        ps.close();
+        return usedResources;
+    }
+
     public void removePos(int id) throws SQLException, ClassNotFoundException {
         String sql = String.format("DELETE FROM Postation WHERE number = '%d'",id);
         try{
@@ -85,6 +100,18 @@ public class PostationDAO{
         }catch (SQLException e){
             System.err.println("Error occurred while removing from database: " + e.getMessage());
         }
+    }
+
+    public int getCountPostations() throws SQLException{
+        String sql = "SELECT COUNT(*) AS total FROM Postation";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        int count = 0;
+        if (rs.next()) {
+            count = rs.getInt("total");
+        }
+        ps.close();
+        return count;
     }
 
     public ArrayList<Postation> getPostation(int id) throws SQLException, ClassNotFoundException {

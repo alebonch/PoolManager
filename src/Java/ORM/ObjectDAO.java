@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 
 public class ObjectDAO{
@@ -51,6 +52,15 @@ public class ObjectDAO{
             }
         }
         return object;
+    }
+    public ArrayList<Object> getAllObjects() throws SQLException,ClassNotFoundException{
+        ArrayList<Object> objects = new ArrayList<>();
+        objects.add(getObject("chair"));
+        objects.add(getObject("deckchair"));
+        objects.add(getObject("sunbed"));
+        objects.add(getObject("umbrella"));
+        objects.add(getObject("table"));
+        return objects;
     }
 
     public void updateTotalNumber(int newtotalNumber, String name){
