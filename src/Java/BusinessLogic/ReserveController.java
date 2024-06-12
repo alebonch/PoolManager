@@ -170,4 +170,12 @@ public class ReserveController{
             postationDAO.updateUmbrella(postation, n_umbrella);
         }
     }
+    public int TimeRecordFixer(String date, String turno) throws SQLException, ClassNotFoundException{
+        TimeRecordDAO timeRecordDAO = new TimeRecordDAO();
+        if(timeRecordDAO.getTimeRecord(date, turno).isEmpty()){
+            timeRecordDAO.addTimeRecord(date, turno);
+            return timeRecordDAO.getTimeRecord(date, turno).get(0).getId();
+        }
+        return timeRecordDAO.getTimeRecord(date, turno).get(0).getId();
+    }
 }

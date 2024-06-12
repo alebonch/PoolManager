@@ -22,9 +22,20 @@ public class ReservationDAO {
     }
 
     public void addReservation(String username, int postation,  int date) throws SQLException, ClassNotFoundException {
-
-        String sql = String.format("INSERT INTO Reservation (userId, postation, date) " +
-                                   "VALUES ('%s', %d ,%d)", username, postation, date);
+        
+        PostationDAO postationDAO = new PostationDAO();
+        ArrayList<DomainModel.Object> objects = postationDAO.getPostation(date).get(0).getObjects();
+        int sumcost=0;
+        TimeRecordDAO timeRecordDAO = new TimeRecordDAO();
+        String turno = timeRecordDAO.getTimeRecord(date).get(0).getTurno();
+        for (DomainModel.Object object : objects){
+            sumcost += (object.getPrice() * object.getNumber());
+        }
+        if(turno.equals("Pomeriggio")) {
+        sumcost=(int) Math.round(sumcost*0.6);
+        }
+        String sql = String.format("INSERT INTO Reservation (userId, postation, date, cost) " +
+                                   "VALUES ('%s', %d ,%d,%d)", username, postation, date,sumcost);
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.executeUpdate();
