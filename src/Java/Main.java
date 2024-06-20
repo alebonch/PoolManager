@@ -1,8 +1,8 @@
 import BusinessLogic.AdminController;
 import BusinessLogic.LoginController;
 import BusinessLogic.ReserveController;
+import BusinessLogic.ResourcesController;
 import BusinessLogic.UserController;
-import DomainModel.Postation;
 import DomainModel.Reservation;
 import DomainModel.User;
 import java.sql.SQLException;
@@ -16,7 +16,6 @@ public class Main {
         handleLoginAction();
 
     }
-
     private static void handleLoginAction() throws ClassNotFoundException, SQLException{
         Scanner scanner = new Scanner(System.in);
         LoginController loginController = new LoginController();
@@ -104,6 +103,72 @@ public class Main {
             }
         } while (true);
     }
+    private static void handleResourcesAction() throws ClassNotFoundException, SQLException{
+        Scanner scanner = new Scanner(System.in);
+        ResourcesController resourcesController = new ResourcesController();
+        String input;
+        do { 
+            System.out.println(
+                    """
+                    \s
+                     Admin Resources Actions
+                     1. Update chairs
+                     2. Update deckchairs
+                     3. Update sunbeds
+                     4. Update tables 
+                     5. Update umbrellas
+                     6. View availability of resources
+                     7. Check resources
+                     8. Back to main menu
+                   \s"""
+            );
+            input = scanner.nextLine();
+            switch (input) {
+                case "1" -> {
+                    System.out.println("Insert the new number of chairs:");
+                    String input1 = scanner.nextLine();
+                    resourcesController.updateChairs(Integer.parseInt(input1));
+                }
+                case "2" -> {
+                    System.out.println("Insert the new number of deckchairs:");
+                    String input1 = scanner.nextLine();
+                    resourcesController.updateDeckchairs(Integer.parseInt(input1));
+                }
+                case "3" -> {
+                    System.out.println("Insert the new number of sunbeds:");
+                    String input1 = scanner.nextLine();
+                    resourcesController.updateSunbeds(Integer.parseInt(input1));
+                }
+                case "4" -> {
+                    System.out.println("Insert the new number of tables:");
+                    String input1 = scanner.nextLine();
+                    resourcesController.updateTables(Integer.parseInt(input1));
+                }
+                case "5" -> {
+                    System.out.println("Insert the new number of umbrellas:");
+                    String input1 = scanner.nextLine();
+                    resourcesController.updateUmbrellas(Integer.parseInt(input1));
+                }
+                case "6" -> {
+                    System.out.println("Insert the date:");
+                    String input1 = scanner.nextLine();
+                    System.out.println("Insert the turn:");
+                    String input2 = scanner.nextLine();
+                    ReserveController reserveController = new ReserveController();
+                    int[] resources = resourcesController.getAvailableResources(reserveController.TimeRecordFixer(input1, input2));
+                    System.err.println("| Chairs: "+resources[0]+" | Deckchairs: "+resources[1]+" | Sunbeds: "+resources[2]+" | Tables: "+resources[3]+
+                    " | Umbrellas: "+resources[4]+" |");
+           }
+                case "7" -> {
+                    ArrayList<DomainModel.Object> objects = resourcesController.getResources();
+                    for(DomainModel.Object object:objects){
+                        System.out.println(object.getInfo());
+                    }
+                }
+                case "8" -> handleAdminAction();
+            }
+        } while (true);
+    }
     private static void handleAdminUserAction()throws ClassNotFoundException, SQLException{
         Scanner scanner = new Scanner(System.in);
         AdminController adminController = new AdminController();
@@ -149,7 +214,6 @@ public class Main {
     }
     private static void handleAdminReservationsAction() throws ClassNotFoundException, SQLException{
         Scanner scanner = new Scanner(System.in);
-        AdminController adminController = new AdminController();
         ReserveController reserveController = new ReserveController();
         String input;
         do { 
@@ -160,27 +224,31 @@ public class Main {
                      1. View reservations
                      2. Add reservation
                      3. Remove reservation
-                     4. Back to Admin menu
+                     4. Update Reservation's info
+                     5. Back to Admin menu
                    \s"""
             );
             input = scanner.nextLine();
             switch (input) {
                 case "1" -> handleAdminReservationsViewAction();
                 case "2" -> {
-                    //FIXME
                     String[] data = addReservation();
-                    //FIXME
-                    adminController.addReservation(data[0], Integer.parseInt(data[1]),Integer.parseInt(data[3]),data[2]);
-                }
+                    Scanner scanner2 = new Scanner(System.in);
+                    String username;
+                    do{
+                        System.out.println("Mail: ");
+                        username = scanner2.nextLine();
+                    }while(username==null || username.isEmpty());
+                    reserveController.Reserve(Integer.parseInt(data[0]),Integer.parseInt(data[1]),Integer.parseInt(data[2]),Integer.parseInt(data[3]),Integer.parseInt(data[4]),data[5],data[6],Integer.parseInt(data[7]),username);                }
                 case "3" -> handleAdminReservationsRemoveAction();
-                case "4" -> handleAdminAction();
+                case "4" -> handleAdminReservationUpdate();
+                case "5" -> handleAdminAction();
             }
         }while (true);
     }
-
     private static void handleAdminReservationsRemoveAction() throws ClassNotFoundException, SQLException{
         Scanner scanner = new Scanner(System.in);
-        AdminController adminController = new AdminController();
+        ReserveController reserveController = new ReserveController();
         String input;
         do { 
             System.out.println(
@@ -190,30 +258,27 @@ public class Main {
                      1. Remove precise reservation
                      2. Remove all reservations by user
                      3. Remove all reservations by date
-                     4. Back to Admin menu
+                     4. Back to reservation menu
                    \s"""
             );
             input = scanner.nextLine();
             switch (input) {
                 case "1" -> {
-                    //FIXME
                     System.out.println("Insert the username of the reservation: ");
                     String username = scanner.nextLine();
-                    System.out.println("Insert the date of the reservation: ");
+                    System.out.println("Insert the id of the date of the reservation: ");
                     String date = scanner.nextLine();
-                    adminController.removeReservation(username, date);
+                    reserveController.removeReservation(username, Integer.parseInt(date));
                 }
                 case "2" -> {
-                    //FIXME
                     System.out.println("Insert the username of the reservations: ");
                     String username = scanner.nextLine();
-                    adminController.removeAllReservationsByUser(username);
+                    reserveController.removeUserReservation(username);
                 }
                 case "3" -> {
-                    //FIXME
                     System.out.println("Insert the date of the reservations: ");
                     String date = scanner.nextLine();
-                    adminController.removeAllReservationsByDate(date);
+                    reserveController.removeAllReservationsByDate(Integer.parseInt(date));
                 }
                 case "4" -> handleAdminReservationsAction();
             }
@@ -291,7 +356,6 @@ public class Main {
             }
         }while (true);
     }
-    //OKAY
     private static void handleAdminExtraAction()throws ClassNotFoundException, SQLException{
         Scanner scanner = new Scanner(System.in);
         AdminController adminController = new AdminController();
@@ -300,7 +364,7 @@ public class Main {
             System.out.println(
                     """
                     \s
-                     Reservation view Actions
+                     Admin extra Actions
                      1. Update Admin password
                      2  Generate default database
                      3. Reset database
@@ -325,7 +389,6 @@ public class Main {
             }
         }while (true);
     }
-    //ADD HANDLER TO UPDATE RESERVATIONS INFO'S
     private static void handleUserAction(User user) throws ClassNotFoundException, SQLException{
         Scanner scanner = new Scanner(System.in);
         UserController userController = new UserController();
@@ -335,8 +398,8 @@ public class Main {
                     """
                     \s
                      User Actions
-                     1. Reserve or cancel a reservation
-                     2. Manage profile
+                     1. Reserve, cancel, view or update one of your reservations
+                     2. Manage your profile
                      3. Log out
                    \s"""
             );
@@ -347,8 +410,93 @@ public class Main {
                 case "3" -> handleLoginAction();
             }
         } while (true);
+        
     } 
-
+    private static void handleAdminReservationUpdate() throws ClassNotFoundException, SQLException{
+        Scanner scanner = new Scanner(System.in);
+        UserController userController = new UserController();
+        ReserveController reserveController = new ReserveController();
+        ResourcesController resourcesController = new ResourcesController();
+        String input;
+        do { 
+            System.out.println(
+                    """
+                    \s
+                     Admin Reservation Update Actions
+                     1. Update chairs
+                     2. Update deckchairs
+                     3. Update sunbeds
+                     4. Update tables
+                     5. Update umbrellas
+                     6. Back to reservation menu
+                   \s"""
+            );
+            input = scanner.nextLine();
+            switch (input) {
+                case "1" -> {
+                    String date, turno, newNumber, username;
+                    System.out.println("Insert the mail associated to the reservation: ");
+                    username = scanner.nextLine();
+                    System.out.println("Insert the date of the day you want to cancel the reservation: ");
+                    date = scanner.nextLine();
+                    System.out.println("Insert the turn you want to cancel the reservation: ");
+                    turno = scanner.nextLine();
+                    System.out.println("Insert the new number for chairs: ");
+                    newNumber = scanner.nextLine();
+                    reserveController.updateChairs(username, reserveController.TimeRecordFixer(date, turno), Integer.parseInt(newNumber) );
+                }
+                case "2" -> {
+                    String date, turno, newNumber, username;
+                    System.out.println("Insert the mail associated to the reservation: ");
+                    username = scanner.nextLine();
+                    System.out.println("Insert the date of the day you want to cancel the reservation: ");
+                    date = scanner.nextLine();
+                    System.out.println("Insert the turn you want to cancel the reservation: ");
+                    turno = scanner.nextLine();
+                    System.out.println("Insert the new number for deckchairs: ");
+                    newNumber = scanner.nextLine();
+                    reserveController.updateDeckchairs(username, reserveController.TimeRecordFixer(date, turno), Integer.parseInt(newNumber) );
+                }
+                case "3" -> {                    
+                    String date, turno, newNumber, username;
+                    System.out.println("Insert the mail associated to the reservation: ");
+                    username = scanner.nextLine();
+                    System.out.println("Insert the date of the day you want to cancel the reservation: ");
+                    date = scanner.nextLine();
+                    System.out.println("Insert the turn you want to cancel the reservation: ");
+                    turno = scanner.nextLine();
+                    System.out.println("Insert the new number for sunbeds: ");
+                    newNumber = scanner.nextLine();
+                    reserveController.updateSunbeds(username, reserveController.TimeRecordFixer(date, turno), Integer.parseInt(newNumber) );
+                }
+                case "4" -> {                    
+                    String date, turno, newNumber, username;
+                    System.out.println("Insert the mail associated to the reservation: ");
+                    username = scanner.nextLine();
+                    System.out.println("Insert the date of the day you want to cancel the reservation: ");
+                    date = scanner.nextLine();
+                    System.out.println("Insert the turn you want to cancel the reservation: ");
+                    turno = scanner.nextLine();
+                    System.out.println("Insert the new number for tables: ");
+                    newNumber = scanner.nextLine();
+                    reserveController.updateTables(username, reserveController.TimeRecordFixer(date, turno), Integer.parseInt(newNumber) );
+                }
+                case "5" -> {                    
+                    String date, turno, newNumber, username;
+                    System.out.println("Insert the mail associated to the reservation: ");
+                    username = scanner.nextLine();
+                    System.out.println("Insert the date of the day you want to cancel the reservation: ");
+                    date = scanner.nextLine();
+                    System.out.println("Insert the turn you want to cancel the reservation: ");
+                    turno = scanner.nextLine();
+                    System.out.println("Insert the new number for umbrellas: ");
+                    newNumber = scanner.nextLine();
+                    reserveController.updateUmbrellas(username, reserveController.TimeRecordFixer(date, turno), Integer.parseInt(newNumber) );
+                }
+                case "6" -> handleAdminReservationsAction();
+            }
+        } while (true);
+    }
     private static void handleUserReserveAction(User user) throws ClassNotFoundException, SQLException{
         Scanner scanner = new Scanner(System.in);
         UserController userController = new UserController();
@@ -362,7 +510,8 @@ public class Main {
                      1. Check user's reservation
                      2. Add reservation
                      3. Remove reservation
-                     4. Log out
+                     4. Update reservation's info
+                     5. Back to user menu
                    \s"""
             );
             input = scanner.nextLine();
@@ -374,32 +523,18 @@ public class Main {
                     }
                 }
                 case "2" -> {
-                    //FIX ME
-                    String postation, date, pm;
-                    System.out.println("Insert the number of the postation you want to reserve: ");
-                    postation = scanner.nextLine();
-                    System.out.println("Insert the date of the day you want to reserve the postation: ");
-                    date = scanner.nextLine();
-                    System.out.println("Insert the payment method of the reservation (optional): ");
-                    pm = scanner.nextLine();
-                    userController.addReservation(user.getMail(), Integer.parseInt(postation), Integer.parseInt(pm), date);
+                    String [] data = addReservation();
+                    reserveController.Reserve(Integer.parseInt(data[0]),Integer.parseInt(data[1]),Integer.parseInt(data[2]),Integer.parseInt(data[3]),Integer.parseInt(data[4]),data[5],data[6],Integer.parseInt(data[7]),user.getMail());
                 }
-                case "3" -> {
-                    //FIX ME                    
-                    String date;
+                case "3" -> {                    
+                    String date, turno;
                     System.out.println("Insert the date of the day you want to cancel the reservation: ");
                     date = scanner.nextLine();
-                    userController.removeReservation(user.getMail(), date);
+                    System.out.println("Insert the turn you want to cancel the reservation: ");
+                    turno = scanner.nextLine();
+                    reserveController.removeReservation(user.getMail(), reserveController.TimeRecordFixer(date, turno));
                 }
-                case "4" -> {
-                    //FIX ME
-                    String date, pm;
-                    System.out.println("Insert the date of the day you want to update the reservation's payment method: ");
-                    date = scanner.nextLine();
-                    System.out.println("Insert the new payment method: ");
-                    pm = scanner.nextLine();
-                    userController.updatePaymentMethods(user.getMail(), date, Integer.parseInt(pm));
-                }
+                case "4" -> handleUserReservationUpdate(user);
                 case "5" -> handleUserAction(user);
             }
         } while (true);
@@ -441,8 +576,81 @@ public class Main {
             }
         } while (true);
     }
-
-
+    private static void handleUserReservationUpdate(User user) throws ClassNotFoundException, SQLException{
+        Scanner scanner = new Scanner(System.in);
+        UserController userController = new UserController();
+        ReserveController reserveController = new ReserveController();
+        ResourcesController resourcesController = new ResourcesController();
+        String input;
+        do { 
+            System.out.println(
+                    """
+                    \s
+                     User Reservation Update Actions
+                     1. Update chairs
+                     2. Update deckchairs
+                     3. Update sunbeds
+                     4. Update tables
+                     5. Update umbrellas
+                     6. Back to reservation menu
+                   \s"""
+            );
+            input = scanner.nextLine();
+            switch (input) {
+                case "1" -> {
+                    String date, turno, newNumber;
+                    System.out.println("Insert the date of the day you want to cancel the reservation: ");
+                    date = scanner.nextLine();
+                    System.out.println("Insert the turn you want to cancel the reservation: ");
+                    turno = scanner.nextLine();
+                    System.out.println("Insert the new number for chairs: ");
+                    newNumber = scanner.nextLine();
+                    reserveController.updateChairs(user.getMail(), reserveController.TimeRecordFixer(date, turno), Integer.parseInt(newNumber) );
+                }
+                case "2" -> {
+                    String date, turno, newNumber;
+                    System.out.println("Insert the date of the day you want to cancel the reservation: ");
+                    date = scanner.nextLine();
+                    System.out.println("Insert the turn you want to cancel the reservation: ");
+                    turno = scanner.nextLine();
+                    System.out.println("Insert the new number for deckchairs: ");
+                    newNumber = scanner.nextLine();
+                    reserveController.updateDeckchairs(user.getMail(), reserveController.TimeRecordFixer(date, turno), Integer.parseInt(newNumber) );
+                }
+                case "3" -> {                    
+                    String date, turno, newNumber;
+                    System.out.println("Insert the date of the day you want to cancel the reservation: ");
+                    date = scanner.nextLine();
+                    System.out.println("Insert the turn you want to cancel the reservation: ");
+                    turno = scanner.nextLine();
+                    System.out.println("Insert the new number for sunbeds: ");
+                    newNumber = scanner.nextLine();
+                    reserveController.updateSunbeds(user.getMail(), reserveController.TimeRecordFixer(date, turno), Integer.parseInt(newNumber) );
+                }
+                case "4" -> {                    
+                    String date, turno, newNumber;
+                    System.out.println("Insert the date of the day you want to cancel the reservation: ");
+                    date = scanner.nextLine();
+                    System.out.println("Insert the turn you want to cancel the reservation: ");
+                    turno = scanner.nextLine();
+                    System.out.println("Insert the new number for tables: ");
+                    newNumber = scanner.nextLine();
+                    reserveController.updateTables(user.getMail(), reserveController.TimeRecordFixer(date, turno), Integer.parseInt(newNumber) );
+                }
+                case "5" -> {                    
+                    String date, turno, newNumber;
+                    System.out.println("Insert the date of the day you want to cancel the reservation: ");
+                    date = scanner.nextLine();
+                    System.out.println("Insert the turn you want to cancel the reservation: ");
+                    turno = scanner.nextLine();
+                    System.out.println("Insert the new number for umbrellas: ");
+                    newNumber = scanner.nextLine();
+                    reserveController.updateUmbrellas(user.getMail(), reserveController.TimeRecordFixer(date, turno), Integer.parseInt(newNumber) );
+                }
+                case "6" -> handleUserReserveAction(user);
+            }
+        } while (true);
+    }
     private static String[] register() {
 
         Scanner scanner2 = new Scanner(System.in);
@@ -472,56 +680,37 @@ public class Main {
         return new String[] {mail, pwd, name, surname, telephone};
 
     }
-
-    private static String[] addTypo(){
+    private static String[] addReservation(){           
         Scanner scanner2 = new Scanner(System.in);
 
         // personal data
-        System.out.println("\n Please provide the following information to add the typology:");
+        System.out.println("\n Please provide the following information to add the reservation:");
         //login
-        String name, n_chairs, n_deckchairs, n_sunbeds, m_sunbeds, gazebo;
+        String date, turno, n_chairs, n_deckchairs, n_sunbeds, n_umbrellas, n_tables,location;
         do { 
-            System.out.println("Name: ");
-            name = scanner2.nextLine();
+            System.out.println("Date: ");
+            date = scanner2.nextLine();
+            System.out.println("Turno: ");
+            turno = scanner2.nextLine();
+            System.out.println("Location's ID:");
+            location= scanner2.nextLine();
             System.out.println("Number of chairs: ");
             n_chairs = scanner2.nextLine();
             System.out.println("Number of deckchairs: ");
             n_deckchairs = scanner2.nextLine();
             System.out.println("Number of sunbeds: ");
             n_sunbeds = scanner2.nextLine();
-            System.out.println("Material of sunbeds: ");
-            m_sunbeds = scanner2.nextLine();
-            System.out.println("Insert 'True' if there is a gazebo, insert 'False' otherwise: ");
-            gazebo = scanner2.nextLine();
-        } while (name==null||name.isEmpty()||n_chairs == null || n_chairs.isEmpty() || n_deckchairs == null || n_deckchairs.isEmpty() || n_sunbeds == null || n_sunbeds.isEmpty() 
-        || m_sunbeds == null || m_sunbeds.isEmpty() || gazebo == null || gazebo.isEmpty()); 
+            System.out.println("Number of umbrellas: ");
+            n_umbrellas = scanner2.nextLine();
+            System.out.println("Number of tables: ");
+            n_tables = scanner2.nextLine();
+
+        } while (date == null || date.isEmpty() || n_chairs==null||n_chairs.isEmpty()|| n_deckchairs==null||n_deckchairs.isEmpty()
+        || n_sunbeds==null||n_sunbeds.isEmpty()|| n_tables==null||n_tables.isEmpty()|| n_umbrellas==null||n_umbrellas.isEmpty()); 
 
         
 
-        return new String[] {n_chairs,n_deckchairs,n_sunbeds,m_sunbeds,gazebo, name};
-
-    }
-    private static String[] addReservation(){                    //FIX ME
-        Scanner scanner2 = new Scanner(System.in);
-
-        // personal data
-        System.out.println("\n Please provide the following information to add the reservation:");
-        //login
-        String username, postation, date, pm;
-        do { 
-            System.out.println("Mail: ");
-            username = scanner2.nextLine();
-            System.out.println("Number of postation: ");
-            postation = scanner2.nextLine();
-            System.out.println("Date: ");
-            date = scanner2.nextLine();
-            System.out.println("Payment method: ");
-            pm = scanner2.nextLine();
-        } while (username==null||username.isEmpty()||postation == null || postation.isEmpty() || date == null || date.isEmpty()); 
-
-        
-
-        return new String[] {username, postation, date, pm};
+        return new String[] {n_chairs, n_deckchairs, n_sunbeds, n_tables, n_umbrellas, date, turno, location};
 
     } 
 }

@@ -40,7 +40,7 @@ public class PostationDAO{
         PreparedStatement ps = connection.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
         ArrayList<Postation> positions = new ArrayList<>();
-        ArrayList<DomainModel.Object> objects = null;
+        ArrayList<DomainModel.Object> objects = new ArrayList<>();
         ObjectDAO objectDAO = new ObjectDAO();
         LocationDAO locationDAO = new LocationDAO();
         while (rs.next()) {

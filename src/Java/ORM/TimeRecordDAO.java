@@ -31,19 +31,6 @@ public class TimeRecordDAO{
     }
     public ArrayList<TimeRecord> getAllTimeRecord() throws SQLException, ClassNotFoundException{
         String sql = String.format("SELECT * FROM TimeRecord ORDER BY id");
-        return selectTimeRecord(sql);
-    }
-
-    public ArrayList<TimeRecord> getTimeRecord(String date, String turno) throws SQLException, ClassNotFoundException{
-        String sql = String.format("SELECT * FROM TimeRecord WHERE date = '%s' AND turno = '%s'", date, turno);
-        return selectTimeRecord(sql);
-    }
-    public ArrayList<TimeRecord> getTimeRecord(int id) throws SQLException, ClassNotFoundException{
-        String sql = String.format("SELECT * FROM TimeRecord WHERE id = '%d'", id);
-        return selectTimeRecord(sql);
-    }
-
-    public ArrayList<TimeRecord> selectTimeRecord(String sql) throws SQLException, ClassNotFoundException{
         ArrayList<TimeRecord> timeRecords;
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
@@ -57,6 +44,30 @@ public class TimeRecordDAO{
             }
         }
         return timeRecords;
+
+    }
+
+    public TimeRecord getTimeRecord(String date, String turno) throws SQLException, ClassNotFoundException{
+        String sql = String.format("SELECT * FROM TimeRecord WHERE date = '%s' AND turno = '%s'", date, turno);
+        return selectTimeRecord(sql);
+    }
+    public TimeRecord getTimeRecord(int id) throws SQLException, ClassNotFoundException{
+        String sql = String.format("SELECT * FROM TimeRecord WHERE id = '%d'", id);
+        return selectTimeRecord(sql);
+    }
+
+    public TimeRecord selectTimeRecord(String sql) throws SQLException, ClassNotFoundException{
+        TimeRecord timeRecord = new TimeRecord(0,"a","a");
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int Id = rs.getInt("id");
+                String date = rs.getString("date");
+                String turno = rs.getString("turno");
+                timeRecord = new TimeRecord(Id,date,turno);
+            }
+        }
+        return timeRecord;
     }
     public void removeTimeRecord(int id){
         String sql = String.format("DELETE FROM TimeRecord WHERE id = '%d'",id);

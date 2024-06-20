@@ -1,30 +1,50 @@
--- Insert 5 Users
+-- Inserimento degli Utenti
 INSERT INTO Users (mail, password, name, surname, telephone) VALUES
-('john.doe@example.com', 'password123', 'John', 'Doe', '1234567890'),
-('jane.smith@example.com', 'password456', 'Jane', 'Smith', '0987654321'),
-('alice.jones@example.com', 'password789', 'Alice', 'Jones', '1122334455'),
-('bob.brown@example.com', 'passwordabc', 'Bob', 'Brown', '2233445566'),
-('charlie.davis@example.com', 'passworddef', 'Charlie', 'Davis', '3344556677');
+('user1@example.com', 'password1', 'Mario', 'Rossi', '1234567890'),
+('user2@example.com', 'password2', 'Luca', 'Bianchi', '1234567891'),
+('user3@example.com', 'password3', 'Giulia', 'Verdi', '1234567892'),
+('user4@example.com', 'password4', 'Anna', 'Neri', '1234567893'),
+('user5@example.com', 'password5', 'Sara', 'Russo', '1234567894'),
+('user6@example.com', 'password6', 'Marco', 'Ferrari', '1234567895'),
+('user7@example.com', 'password7', 'Elena', 'Costa', '1234567896'),
+('user8@example.com', 'password8', 'Andrea', 'Gallo', '1234567897');
 
--- Insert 15 Postation
-INSERT INTO Postation (number, type, zone, availability) VALUES
-(1, 'standard', 'North', TRUE),
-(2, 'standard', 'North', TRUE),
-(3, 'standard', 'North', TRUE),
-(4, 'standard', 'South', TRUE),
-(5,'luxury' , 'South', TRUE),
-(6, 'luxury', 'South', TRUE),
-(7,'luxury', 'East', TRUE),
-(8, 'premium', 'East', TRUE),
-(9, 'premium', 'East', TRUE),
-(10, 'luxury', 'West', TRUE),
-(11, 'luxury', 'West', TRUE),
-(12, 'luxury', 'West', TRUE),
-(13, 'standard', 'West', TRUE),
-(14, 'standard', 'West', TRUE),
-(15, 'standard', 'West', TRUE);
+-- Inserimento degli Oggetti
+INSERT INTO Object (name, totalnumber, price, material, color) VALUES
+('umbrella', 50, 8, 'Tessuto', 'Blu'),
+('chair', 100, 2, 'Plastica', 'Bianco'),
+('sunbed', 75, 3, 'Metallo', 'Verde'),
+('table', 20, 4, 'Legno', 'Marrone'),
+('deckchair', 30, 3, 'Alluminio', 'Rosso');
 
--- Insert 2 Reservations
-INSERT INTO Reservation (userId, postation,date) VALUES
-('john.doe@example.com', 1, '2024-11-06'),
-('jane.smith@example.com', 5, '2023-06-05');
+-- Inserimento dei Record Temporali
+INSERT INTO TimeRecord (date, turno) VALUES
+('2024-06-19', 'Mattina'),
+('2024-06-19', 'Pomeriggio');
+
+-- Inserimento delle Locazioni
+INSERT INTO Location (id, description) VALUES
+(1, 'Solarium'),
+(2, 'Boschetto'),
+(3, 'Bordo vasca'),
+(4, 'Giardino');
+
+-- Inserimento delle Postazioni
+INSERT INTO Postation (number, n_chair, n_deckchair, n_sunbed, n_table, n_umbrella, zone) VALUES
+(1, 2, 1, 1, 1, 1, 1),
+(2, 4, 2, 2, 1, 2, 2),
+(3, 3, 1, 1, 1, 1, 3),
+(4, 2, 1, 1, 1, 1, 4),  
+(5, 4, 2, 2, 1, 2, 1), 
+(6, 3, 1, 1, 1, 1, 2),  
+(7, 2, 1, 1, 1, 1, 3);  
+
+-- Inserimento delle Prenotazioni
+INSERT INTO Reservation (userId, postation, date, cost) VALUES
+('user1@example.com', 1, 1, 22),
+('user2@example.com', 2, 2, 40),
+('user3@example.com', 3, 1, 24),
+('user4@example.com', 4, 2, 28), 
+('user5@example.com', 5, 1, 42), 
+('user6@example.com', 6, 2, 34),
+('user7@example.com', 7, 1, 50); 

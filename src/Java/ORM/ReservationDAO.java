@@ -24,10 +24,10 @@ public class ReservationDAO {
     public void addReservation(String username, int postation,  int date) throws SQLException, ClassNotFoundException {
         
         PostationDAO postationDAO = new PostationDAO();
-        ArrayList<DomainModel.Object> objects = postationDAO.getPostation(date).get(0).getObjects();
+        ArrayList<DomainModel.Object> objects = postationDAO.getPostation(postation).get(0).getObjects();
         int sumcost=0;
         TimeRecordDAO timeRecordDAO = new TimeRecordDAO();
-        String turno = timeRecordDAO.getTimeRecord(date).get(0).getTurno();
+        String turno = timeRecordDAO.getTimeRecord(date).getTurno();
         for (DomainModel.Object object : objects){
             sumcost += (object.getPrice() * object.getNumber());
         }
@@ -44,6 +44,28 @@ public class ReservationDAO {
             System.err.println("Error: " + e.getMessage());
         }
 
+    }
+
+    public void updateCosts(int postation, int date) throws SQLException, ClassNotFoundException{
+        PostationDAO postationDAO = new PostationDAO();
+        ArrayList<DomainModel.Object> objects = postationDAO.getPostation(postation).get(0).getObjects();
+        int sumcost=0;
+        TimeRecordDAO timeRecordDAO = new TimeRecordDAO();
+        String turno = timeRecordDAO.getTimeRecord(date).getTurno();
+        for (DomainModel.Object object : objects){
+            sumcost += (object.getPrice() * object.getNumber());
+        }
+        if(turno.equals("Pomeriggio")) {
+        sumcost=(int) Math.round(sumcost*0.6);
+        }
+        String sql = String.format("UPDATE Reservation SET cost = %d WHERE postation = %d AND date = %d", sumcost,postation,date);
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.executeUpdate();
+            System.out.println("Cost updated successfully.");
+        } catch (SQLException e) {
+            System.err.println("Error: " + e.getMessage());
+        }
     }
 
     public void removeReservation(String username, int  date) throws SQLException, ClassNotFoundException {
@@ -96,7 +118,7 @@ public class ReservationDAO {
                 PostationDAO positionDAO = new PostationDAO();
                 int date = rs.getInt("date");
                 TimeRecordDAO timeRecordDAO = new TimeRecordDAO();
-                Reservation reservation = new Reservation(userDAO.getUser(userId), positionDAO.getPostation(postation).get(0), timeRecordDAO.getTimeRecord(date).get(0));
+                Reservation reservation = new Reservation(userDAO.getUser(userId), positionDAO.getPostation(postation).get(0), timeRecordDAO.getTimeRecord(date));
                 reservations.add(reservation);
             }
         }
