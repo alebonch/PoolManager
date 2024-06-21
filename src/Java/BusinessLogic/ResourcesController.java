@@ -47,7 +47,7 @@ public class ResourcesController {
         return resources;
     }
     public boolean CheckValues(int n_chairs,int n_deckchairs,int n_sunbeds, int n_tables, int n_umbrellas, int date) throws SQLException, ClassNotFoundException{
-        // Aggiungere calcolo per i valori parziali delle risorse
+        // Prendo il numero di risorse utilizzate
         ReservationDAO reservationDAO = new ReservationDAO();
         PostationDAO postationDAO = new PostationDAO();
         ArrayList<Reservation> reservations = reservationDAO.SelectReservationsByDate(date);
