@@ -578,9 +578,7 @@ public class Main {
     }
     private static void handleUserReservationUpdate(User user) throws ClassNotFoundException, SQLException{
         Scanner scanner = new Scanner(System.in);
-        UserController userController = new UserController();
         ReserveController reserveController = new ReserveController();
-        ResourcesController resourcesController = new ResourcesController();
         String input;
         do { 
             System.out.println(
