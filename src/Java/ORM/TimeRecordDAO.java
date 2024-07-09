@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 public class TimeRecordDAO{
@@ -19,22 +18,17 @@ public class TimeRecordDAO{
         }
 
     }
-        public int addTimeRecord(String date, String turno) throws SQLException {
-    String insert = "INSERT INTO TimeRecord (date, turno) VALUES (?, ?)";
-    try (PreparedStatement stmt = connection.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)) {
-        stmt.setString(1, date);
-        stmt.setString(2, turno);
-        stmt.executeUpdate();
-        try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-            if (generatedKeys.next()) {
-                return generatedKeys.getInt(1);
-            } else {
-                throw new SQLException("Creating TimeRecord failed, no ID obtained.");
-            }
+        public void addTimeRecord(String date, String turno){
+        String sql = String.format("INSERT INTO TimeRecord (date, turno) " +
+                                   "VALUES ('%s', '%s')", date, turno);
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.executeUpdate();
+            System.out.println("TimeRecord added successfully.");
+        } catch (SQLException e) {
+            System.err.println("Error: " + e.getMessage());
         }
     }
-}
-
     public ArrayList<TimeRecord> getAllTimeRecord() throws SQLException, ClassNotFoundException{
         String sql = String.format("SELECT * FROM TimeRecord ORDER BY id");
         ArrayList<TimeRecord> timeRecords;

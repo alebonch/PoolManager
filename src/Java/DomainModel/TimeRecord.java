@@ -7,6 +7,7 @@ public class TimeRecord{
     public TimeRecord(int id, String date, String turno){
         this.date = date;
         this.turno = turno;
+        this.id = id;
     }
     public int getId(){
         return id;

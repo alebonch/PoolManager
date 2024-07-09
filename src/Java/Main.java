@@ -152,10 +152,7 @@ public class Main {
                 case "6" -> {
                     System.out.println("Insert the date:");
                     String input1 = scanner.nextLine();
-                    System.out.println("Insert the turn:");
-                    String input2 = scanner.nextLine();
-                    ReserveController reserveController = new ReserveController();
-                    int[] resources = resourcesController.getAvailableResources(reserveController.TimeRecordFixer(input1, input2));
+                    int[] resources = resourcesController.getAvailableResources(input1);
                     System.err.println("| Chairs: "+resources[0]+" | Deckchairs: "+resources[1]+" | Sunbeds: "+resources[2]+" | Tables: "+resources[3]+
                     " | Umbrellas: "+resources[4]+" |");
            }
@@ -443,7 +440,7 @@ public class Main {
                     turno = scanner.nextLine();
                     System.out.println("Insert the new number for chairs: ");
                     newNumber = scanner.nextLine();
-                    reserveController.updateChairs(username, reserveController.TimeRecordFixer(date, turno), Integer.parseInt(newNumber) );
+                    reserveController.updateChairs(username, date, turno, Integer.parseInt(newNumber) );
                 }
                 case "2" -> {
                     String date, turno, newNumber, username;
@@ -455,7 +452,7 @@ public class Main {
                     turno = scanner.nextLine();
                     System.out.println("Insert the new number for deckchairs: ");
                     newNumber = scanner.nextLine();
-                    reserveController.updateDeckchairs(username, reserveController.TimeRecordFixer(date, turno), Integer.parseInt(newNumber) );
+                    reserveController.updateDeckchairs(username, date, turno, Integer.parseInt(newNumber) );
                 }
                 case "3" -> {                    
                     String date, turno, newNumber, username;
@@ -467,7 +464,7 @@ public class Main {
                     turno = scanner.nextLine();
                     System.out.println("Insert the new number for sunbeds: ");
                     newNumber = scanner.nextLine();
-                    reserveController.updateSunbeds(username, reserveController.TimeRecordFixer(date, turno), Integer.parseInt(newNumber) );
+                    reserveController.updateSunbeds(username, date, turno, Integer.parseInt(newNumber) );
                 }
                 case "4" -> {                    
                     String date, turno, newNumber, username;
@@ -479,7 +476,7 @@ public class Main {
                     turno = scanner.nextLine();
                     System.out.println("Insert the new number for tables: ");
                     newNumber = scanner.nextLine();
-                    reserveController.updateTables(username, reserveController.TimeRecordFixer(date, turno), Integer.parseInt(newNumber) );
+                    reserveController.updateTables(username, date, turno, Integer.parseInt(newNumber) );
                 }
                 case "5" -> {                    
                     String date, turno, newNumber, username;
@@ -491,7 +488,7 @@ public class Main {
                     turno = scanner.nextLine();
                     System.out.println("Insert the new number for umbrellas: ");
                     newNumber = scanner.nextLine();
-                    reserveController.updateUmbrellas(username, reserveController.TimeRecordFixer(date, turno), Integer.parseInt(newNumber) );
+                    reserveController.updateUmbrellas(username, date, turno, Integer.parseInt(newNumber));
                 }
                 case "6" -> handleAdminReservationsAction();
             }
@@ -603,7 +600,7 @@ public class Main {
                     turno = scanner.nextLine();
                     System.out.println("Insert the new number for chairs: ");
                     newNumber = scanner.nextLine();
-                    reserveController.updateChairs(user.getMail(), reserveController.TimeRecordFixer(date, turno), Integer.parseInt(newNumber) );
+                    reserveController.updateChairs(user.getMail(), date, turno, Integer.parseInt(newNumber) );
                 }
                 case "2" -> {
                     String date, turno, newNumber;
@@ -613,7 +610,7 @@ public class Main {
                     turno = scanner.nextLine();
                     System.out.println("Insert the new number for deckchairs: ");
                     newNumber = scanner.nextLine();
-                    reserveController.updateDeckchairs(user.getMail(), reserveController.TimeRecordFixer(date, turno), Integer.parseInt(newNumber) );
+                    reserveController.updateDeckchairs(user.getMail(), date, turno, Integer.parseInt(newNumber) );
                 }
                 case "3" -> {                    
                     String date, turno, newNumber;
@@ -623,7 +620,7 @@ public class Main {
                     turno = scanner.nextLine();
                     System.out.println("Insert the new number for sunbeds: ");
                     newNumber = scanner.nextLine();
-                    reserveController.updateSunbeds(user.getMail(), reserveController.TimeRecordFixer(date, turno), Integer.parseInt(newNumber) );
+                    reserveController.updateSunbeds(user.getMail(), date, turno, Integer.parseInt(newNumber)  );
                 }
                 case "4" -> {                    
                     String date, turno, newNumber;
@@ -633,7 +630,7 @@ public class Main {
                     turno = scanner.nextLine();
                     System.out.println("Insert the new number for tables: ");
                     newNumber = scanner.nextLine();
-                    reserveController.updateTables(user.getMail(), reserveController.TimeRecordFixer(date, turno), Integer.parseInt(newNumber) );
+                    reserveController.updateTables(user.getMail(), date, turno, Integer.parseInt(newNumber)  );
                 }
                 case "5" -> {                    
                     String date, turno, newNumber;
@@ -643,7 +640,7 @@ public class Main {
                     turno = scanner.nextLine();
                     System.out.println("Insert the new number for umbrellas: ");
                     newNumber = scanner.nextLine();
-                    reserveController.updateUmbrellas(user.getMail(), reserveController.TimeRecordFixer(date, turno), Integer.parseInt(newNumber) );
+                    reserveController.updateUmbrellas(user.getMail(), date, turno, Integer.parseInt(newNumber)  );
                 }
                 case "6" -> handleUserReserveAction(user);
             }

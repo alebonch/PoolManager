@@ -76,7 +76,7 @@ public class PostationDAO{
 
     public int[] getUsedResources(int id) throws SQLException, ClassNotFoundException{
         String sql = String.format("SELECT * FROM Postation  WHERE number = '%d'", id);
-        int[] usedResources = null;
+        int[] usedResources = new int[5];
         PreparedStatement ps = connection.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
