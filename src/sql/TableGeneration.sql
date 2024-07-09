@@ -39,8 +39,9 @@ CREATE TABLE Reservation (
 );
 -- Creazione di Time Record
 CREATE TABLE TimeRecord (
-    id INT SERIAL PRIMARY KEY,
+    id INT UNIQUE NOT NULL,
     date VARCHAR(50),
     turno VARCHAR(50),
+    PRIMARY KEY(date, turno)
 )
 

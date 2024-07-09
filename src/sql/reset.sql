@@ -38,10 +38,11 @@ CREATE TABLE Postation (
 );
 -- Creazione di Time Record
 CREATE TABLE TimeRecord (
-    id SERIAL PRIMARY KEY,
+    id SERIAL NOT NULL UNIQUE,
     date VARCHAR(50),
-    turno VARCHAR(50)
-);
+    turno VARCHAR(50),
+    PRIMARY KEY(date, turno)
+)
 -- Creazione della tabella Prenotazione
 CREATE TABLE Reservation (
     userId VARCHAR(50) REFERENCES Users(mail),

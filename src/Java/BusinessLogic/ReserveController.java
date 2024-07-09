@@ -136,12 +136,16 @@ public class ReserveController{
             reservationDAO.updateCosts(postation, date);
         }}
     }
-    public int TimeRecordFixer(String date, String turno) throws SQLException, ClassNotFoundException{
-        TimeRecordDAO timeRecordDAO = new TimeRecordDAO();
-        if(timeRecordDAO.getTimeRecord(date, turno) == null){
-            timeRecordDAO.addTimeRecord(date, turno);
-            return timeRecordDAO.getTimeRecord(date, turno).getId();
-        }
-        return timeRecordDAO.getTimeRecord(date, turno).getId();
+    
+    public int TimeRecordFixer(String date, String turno) throws SQLException, ClassNotFoundException {
+    TimeRecordDAO timeRecordDAO = new TimeRecordDAO();
+    TimeRecord timeRecord = timeRecordDAO.getTimeRecord(date, turno);
+    
+    if (timeRecord == null) {
+        return timeRecordDAO.addTimeRecord(date, turno);
+    } else {
+        return timeRecord.getId();
     }
+}
+
 }
