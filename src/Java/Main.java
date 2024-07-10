@@ -711,5 +711,7 @@ public class Main {
 }
 
 //javac -cp ../../lib/postgresql-42.7.3.jar -d ../../out BusinessLogic/*.java DomainModel/*.java ORM/*.java Main.java
+//javac -cp lib/postgresql-42.7.3.jar:lib/junit-platform-console-standalone-1.11.0-M2.jar -d out src/Java/BusinessLogic/*.java src/Java/ORM/*.java src/Java/DomainModel/*.java src/test/*.java src/Java/Main.java
 
 //java -cp ../../out:../../lib/postgresql-42.7.3.jar Main
+//java -cp lib/postgresql-42.7.3.jar:lib/junit-platform-console-standalone-1.11.0-M2.jar:out org.junit.platform.console.ConsoleLauncher --scan-class-path

@@ -42,7 +42,7 @@ CREATE TABLE TimeRecord (
     date VARCHAR(50),
     turno VARCHAR(50),
     PRIMARY KEY(date, turno)
-)
+);
 -- Creazione della tabella Prenotazione
 CREATE TABLE Reservation (
     userId VARCHAR(50) REFERENCES Users(mail),

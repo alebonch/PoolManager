@@ -51,9 +51,9 @@ public User checkPassword(String username, String password) throws SQLException,
             System.out.println("Login Succeded!");
             String name = rs.getString("name");
             String surname = rs.getString("surname");
-            String mail = rs.getString("mail");
-            String Telephone = rs.getString("telephone");
-            return new User(mail, password, name, surname, Telephone);
+            String telephone = rs.getString("telephone");
+            password = rs.getString("password");
+            return  new User(username, telephone,name,surname,password);
         } else {
             System.out.println("Invalid username or password.");
             return null;
@@ -150,12 +150,12 @@ public void updateUser(String sql, String msg) throws SQLException, ClassNotFoun
     }
 }
 public void updatePassword(String mail, String newPwd) throws ClassNotFoundException, SQLException{
-    String sql = String.format("UPDATE Users SET password = %s WHERE mail = %s", newPwd, mail); 
+    String sql = String.format("UPDATE Users SET password = '%s' WHERE mail = '%s'", newPwd, mail); 
     String msg = "Password correctly updated";
     updateUser(sql, msg);
 }
 public void updateTelephone(String mail, String telephone) throws ClassNotFoundException, SQLException{
-    String sql = String.format("UPDATE Users SET telephone = %s WHERE mail = %s", telephone, mail); 
+    String sql = String.format("UPDATE Users SET telephone = '%s' WHERE mail = '%s'", telephone, mail); 
     String msg = "Telephone correctly updated";
     updateUser(sql, msg);
 }
