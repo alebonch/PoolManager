@@ -373,7 +373,7 @@ Per quanto riguarda la progettazione del database (\ref{fig:er-diagram-1}), si h
             \begin{figure}[H]
                 \centering
                 \fbox{
-                    \includegraphics[width=\textwidth]{Images/packages&diagrams/er-diagramRAW.jpg}
+                    \includegraphics[width=\textwidth]{Images/packages&diagrams/er-diagramRAW.png}
                 }
                 \caption{ER Diagram}
                 \label{fig:er-diagram-2}
@@ -404,8 +404,8 @@ L'implementazione dei 3 packages \hyperref[subsec:domainmodel]{Domain Model}, \h
 \hyperref[subsec:ORM]{ORM} e quella dell'\hyperref[subsec:interfaccia-cli]{interfaccia} sono contenute in \texttt{src/main/java},
 mentre i file relativi al \hyperref[subsec:Database]{database} sono contenuti in \texttt{src/main/sql}.
 \subsection{Domain Model}\label{subsec:domainmodel}
-Come già accennato nella sezione \hyperref[subsec:class-diagram]{2.4}, nel package java.DomainModel (il percorso è:
-src/java/DomainModel) sono state implementate le classi che rappresentano le en-
+Come già accennato nella sezione \hyperref[subsec:class-diagram]{2.4}, nel package \texttt{java.DomainModel} (il percorso è:
+\texttt{src/java/DomainModel}) sono state implementate le classi che rappresentano le en-
 tità del sistema.
 \subsubsection{Object}\label{subsubsec:object}
 Classe astratta che rappresenta le risorse, ovvero ogni singolo oggetto possibilmente prenotabile da un utente. I suoi attributi sono: \textit{totalNumber}, \textit{price} e \textit{name}.
@@ -432,7 +432,7 @@ Classe che rappresenta la prenotazione. E' formata da: una \hyperref[subsubsec:p
 \subsection{ORM}\label{subsec:ORM}
 Come già accennato nella sezione \hyperref[subsec:class-diagram]{2.4}, nel package \texttt{java.ORM} (il percorso è: \\ \texttt{src/java/ORM})
             sono state implementate le classi che si occupano dell'\textit{Object-Relational Mapping}, ovvero delle  operazioni di lettura e scrittura dei dati nel database.
-            Ogni singola classe fuorché \hyperref[subsubsec:connectionmanager]{\textbf{ConnectionManager}} permette alle classi del package \textbf{java.BusinessLogic} di accedere ai dati salvati nel database e possiede come attributo un'istanza di \hyperref[subsubsec:connectionmanager]{\textbf{ConnectionManager}}.
+            Ogni singola classe fuorché \hyperref[subsubsec:connectionmanager]{\textbf{ConnectionManager}} permette alle classi del package \texttt{java.BusinessLogic} di accedere ai dati salvati nel database e possiede come attributo un'istanza di \hyperref[subsubsec:connectionmanager]{\textbf{ConnectionManager}}.
             
 \subsubsection{UserDAO}\label{subsubsec:userDAO}
 Classe che si occupa della generazione di nuovi utenti attraverso il metodo \textit{insertUser()}, di rimuoverne con \textit{removeUser()}, di aggiornare le informazioni dell'utente e di selezionare utenti. Questa classe si occupa anche del controllo necessario al Login attraverso il metodo \textit{checkPassword()}.
@@ -459,13 +459,16 @@ Classe che si occupa della gestione delle prenotazioni, in particolare si è vol
 La classe si occupa di gestire la connessione al database per le altre classi DAO tramite il metodo \texttt{getConnection()}.
 Contiene inoltre i dati di accesso al database, ovvero URL, username e password, che vengono utilizzati per stabilire la connessione.
 Per garantire che ci sia una sola istanza della classe in tutto il sistema e quindi per evitare conflitti tra connessioni, la classe è implementata come un \textit{singleton}.
+
+
 \subsection{Business Logic}\label{subsec:BusinessLogic}
 Come già accennato nella sezione \hyperref[subsec:class-diagram]{2.4}, nel package \texttt{java.BusinessLogic}
 (il percorso è:
 \newline\texttt{src/java/BusinessLogic}) sono state implementate le classi che gestiscono la logica di business del sistema.
 
+
 \subsubsection{AdminController}\label{subsubsec:admincontroller}
-Controller che gestisce le diverse operazioni che possono essere eseguite dall'Actor \textit{Admin}. Si hanno quindi diversi strumenti di selezione per poter controllare tutte le prenotazioni e le postazioni. Inoltre sono qua presenti le \hyperref[fig:admincontrollerSnippets]{Extra Actions}. Per alcune operazioni, chiama UserController e ne utilizza i metodi.
+Controller che gestisce le diverse operazioni che possono essere eseguite dall'Actor \textit{Admin}. Si hanno quindi diversi strumenti di selezione per poter controllare tutte le prenotazioni e le postazioni. Inoltre sono qua presenti le \hyperref[fig:admincontrollerSnippets]{Extra Actions}. Per alcune operazioni, chiama \hyperref[subsubsec:usercontroller]{\textbf{UserController}} e ne utilizza i metodi.
 \begin{figure}[H]
                 \centering
                 \includegraphics[width=\textwidth]{Images/Snippets/AdminControllerSnippets.png}
@@ -474,13 +477,21 @@ Controller che gestisce le diverse operazioni che possono essere eseguite dall'A
             \end{figure}
 \subsubsection{UserController}\label{subsubsec:usercontroller}
 Controller che gestisce le azioni dell'utente, come il controllo delle proprie prenotazioni e la gestione del proprio profilo. 
+
+
 \subsubsection{ReserveController}\label{subsubsec:reservecontroller}
-Controller che si occupa della creazione, rimozione e modifica delle prenotazione. Chiama \hyperref[subsubsec:resourcescontroller]{\textbf{ResourcesController}} ogni volta che deve fare un accesso a delle risorse. Inoltre è stato qua inserito il metodo di calcolo del costo di una prenotazione, che viene effettuato alla creazione della prenotazione e ogni volta che essa viene modificata. 
+Controller che si occupa della creazione, rimozione e modifica delle prenotazione. Chiama \hyperref[subsubsec:resourcescontroller]{\textbf{ResourcesController}} ogni volta che deve fare un accesso a delle risorse. Inoltre è stato qua inserito il metodo di calcolo del costo di una prenotazione, che viene effettuato alla creazione della prenotazione e ogni volta che essa viene modificata. Infine, è stato implementato un metodo che si occupa della gestione della generazione dei \hyperref[subsec:timerecord]{\textbf{TimeRecord}} chiamato \hyperref[fig:fixer]{\textit{TimeRecordFixer()}}, il quale, data in input una data ed un turno, restituisce l'\textit{id} che corrisponde ad esse prendendolo dal \hyperref[subsec:Database]{Database} se già esistente o creandolo sul momento nel caso non sia ancora presente all'interno del sistema.
 \begin{figure}[H]
                 \centering
                 \includegraphics[width=\textwidth]{Images/Snippets/Reserve.png}
-                \caption{Snippet: Reserve method}
+                \caption{Snippet: Reserve() method}
                 \label{fig:reserve}
+            \end{figure}
+\begin{figure}[H]
+                \centering
+                \includegraphics[width=\textwidth]{Images/Snippets/TimeRecordFixer.png}
+                \caption{Snippet: TimeRecordFixer() method}
+                \label{fig:fixer}
             \end{figure}
 \subsubsection{ResourcesController}\label{subsubsec:resourcescontroller}
 Controller che si occupa della gestione delle risorse. Il metodo \textit{CheckValues()} viene invocato da \hyperref[subsubsec:reservecontroller]{\textbf{ReserveController}} ogni volta che si richiede di modificare la quantità di risorse all'interno di una prenotazione. Sono inoltre presenti i metodi per la modifica delle risorse presenti nell'impianto balneare e un metodo chiamato \hyperref[fig:getavailableresources]{\textit{getAvailableResources()}} che restituisce il numero di risorse ancora disponibili in una certa data.
@@ -510,7 +521,7 @@ Come introdotto nella sezione \hyperref[subsec:struttura-e-pratiche-utilizzate]{
             Prendendo per esempio la pagina iniziale \hyperref[fig:navigation-diagram]{\texttt{PoolManager}}, l'utente può scegliere di \hyperref[fig:main]{eseguire l'accesso inserendo il comando \texttt{1}},
             di registrarsi inserendo il comando \texttt{2}, di autenticarsi come admin inserendo il comando \texttt{3} o di uscire dal programma inserendo il comando \texttt{4}.
             Ogni pagina è implementata con un \textit{do-while} e uno \textit{switch-case} per gestire le varie scelte dell'utente, mentre le varie funzionalità
-            sono implementate con metodi specifici delle classi del package \hyperref[subsec:BusinessLogic]{\texttt{BusinessLogic}}.
+            sono implementate con metodi specifici delle classi del package \hyperref[subsec:BusinessLogic]{\texttt{java.BusinessLogic}}.
             La navigazione tra le pagine avviene tramite chiamate agli stessi metodi della classe \texttt{Main}.
 \begin{figure}[H]
                 \centering
@@ -521,9 +532,9 @@ Come introdotto nella sezione \hyperref[subsec:struttura-e-pratiche-utilizzate]{
             \end{figure}
 \newpage
 \section{Testing}\label{sec:testing}
-    Data la struttura del codice, è stato deciso di testare i metodi principali delle classi della \hyperref[subsec:BusinessLogic]{BusinessLogic}, poiché l'implementazione delle classi del \hyperref[subsec:domainmodel]{DomainModel} non ha alcun metodo particolare oltre a \textit{getters} e \textit{setters}. Inoltre i metodi scelti utilizzano metodi di \hyperref[subsec:domainmodel]{DomainModel} e di \hyperref[subsec:ORM]{ORM}. Per ogni classe del pacchetto scelto, è stata creata una classe in cui è stato testato almeno un metodo della classe della classe di riferimento. Avendo inoltre implementato tutti i metodi presentati nel \hyperref[subsec:navigation-diagram]{Navigation Diagram}, è stato deciso di formalizzare un minor numero di test rispetto al numero di metodi effettivamente presenti all'interno delle classi.
+    Data la struttura del codice, è stato deciso di testare i metodi principali delle classi della \hyperref[subsec:BusinessLogic]{BusinessLogic}, poiché l'implementazione delle classi del \hyperref[subsec:domainmodel]{DomainModel} non ha alcun metodo particolare oltre a \textit{getters} e \textit{setters}. Inoltre i metodi scelti utilizzano diversi metodi di \hyperref[subsec:domainmodel]{DomainModel} e di \hyperref[subsec:ORM]{ORM}, di modo da testare un insieme maggiore di metodi del sistema. Per ogni classe del pacchetto scelto, è stata creata una classe in cui è stato testato almeno un metodo della classe della classe di riferimento. Avendo inoltre implementato tutti i metodi presentati nel \hyperref[subsec:navigation-diagram]{Navigation Diagram}, è stato deciso di formalizzare un minor numero di test rispetto al numero di metodi effettivamente presenti all'interno delle classi.
 \subsection{AdminControllerTest}\label{subsec:admincontrollertest}
- Il test scelto per questo controller riguarda il metodo \hyperref[fig:snippetadmindao]{\textit{generateDefaultDatabase()}}, poiché nel farlo è stato possibile testare anche i metodi: \textit{AddUser()}, \textit{getUser()}, \textit{Reserve()} e \textit{getUserReservations()}. Si è quindi controllato che, dopo aver generato il database di default, che si trova al percorso \textbf{src/sql/default.sql}, inserendo un nuovo utente non presente inizialmente non ci fossero prenotazioni a suo nome. Infine si è controllato che, inserita una prenotazione, questa risultasse di fatto all'interno del \hyperref[subsec:Database]{Database}.
+ Il test scelto per questo controller riguarda il metodo \hyperref[fig:snippetadmindao]{\textit{generateDefaultDatabase()}}, poiché nel farlo è stato possibile testare anche i metodi: \textit{AddUser()}, \textit{getUser()}, \textit{Reserve()} e \textit{getUserReservations()}. Si è quindi controllato che, dopo aver generato il database di default, che si trova al percorso \texttt{src/sql/default.sql}, inserendo un nuovo utente non presente inizialmente non ci fossero prenotazioni a suo nome. Infine si è controllato che, inserita una prenotazione, questa risultasse di fatto all'interno del \hyperref[subsec:Database]{Database}.
 \begin{figure}[H]
                 \centering
                 \includegraphics[width=0.9\textwidth]{Images/Snippets/TestAdminController.png}
@@ -533,7 +544,7 @@ Come introdotto nella sezione \hyperref[subsec:struttura-e-pratiche-utilizzate]{
             \end{figure}
 
 \subsection{UserControllerTest}\label{subsection:usercontrollertest}
-Si è scelto di testare uno dei metodi di aggiornamento del profilo di uno \textbf{User}, prendendo come riferimento il metodo \textit{updatePassword()}, a questa maniera è stato possibile riconfermare il test di \textit{getUser()} e di uno dei \textit{getters} di \hyperref[subsubsec:user]{\textbf{User}}.
+Si è scelto di testare uno dei metodi di aggiornamento del profilo di uno \textbf{User}, prendendo come riferimento il metodo \textit{updatePassword()}, a questa maniera è stato possibile riconfermare il test di \textit{getUser()} e di uno dei \textit{getters} di \hyperref[subsubsec:userDAO]{\textbf{UserDAO}}.
 \begin{figure}[H]
                 \centering
                 \includegraphics[width=0.9\textwidth]{Images/Snippets/updatePasswordTest.png}
@@ -542,7 +553,7 @@ Si è scelto di testare uno dei metodi di aggiornamento del profilo di uno \text
                 \label{fig:Usercontrollertest}
             \end{figure}
 \subsection{ReserveControllerTest}\label{subsection:reservecontrollertest}
-Avendo già implicitamente testato il metodo \textit{Reserve()} all'interno del test di \hyperref[fig:Admincontrollertestsnippets]{\textbf{AdminControllerTest}}, è stato qua invece implementato il test di \textit{removeReservation()}. Nello specifico, partendo dalla generazione di un database di default, si salva il numero di prenotazioni totali all'interno di un intero \textit{size}, si procede a rimuovere una prenotazione che conosciamo essere presente all'interno di \textbf{src/sql/default.sql} e si confronta il numero di prenotazioni dopo la rimozione con quello precedente.
+Avendo già implicitamente testato il metodo \textit{Reserve()} all'interno del test di \hyperref[fig:Admincontrollertestsnippets]{\textbf{AdminControllerTest}}, è stato qua invece implementato il test di \textit{removeReservation()}. Nello specifico, partendo dalla generazione di un database di default, si salva il numero di prenotazioni totali all'interno di un intero \textit{size}, si procede a rimuovere una prenotazione che conosciamo essere presente all'interno di \texttt{src/sql/default.sql} e si confronta il numero di prenotazioni dopo la rimozione con quello precedente.
 \begin{figure}[H]
                 \centering
                 \includegraphics[width=0.9\textwidth]{Images/Snippets/removeReservationTest.png}
